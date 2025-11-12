@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2 class="mb-3">退会申请</h2>
+{% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+<div class="card">
+  <div class="card-body">
+    <form method="post" class="row g-3">
+      <div class="col-12">
+        <label class="form-label">退会原因（可选）</label>
+        <input class="form-control" name="reason" maxlength="255" />
+      </div>
+      <div class="col-12">
+        <button class="btn btn-danger" type="submit">提交退会申请</button>
+      </div>
+    </form>
+  </div>
+ </div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="m-0">部门管理</h2>
+</div>
+<div class="card mb-4">
+  <div class="card-body">
+    <form class="row g-3" method="post">
+      <div class="col-md-6">
+        <label class="form-label">部门名称</label>
+        <input class="form-control" name="name" required maxlength="64" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">描述</label>
+        <input class="form-control" name="description" maxlength="255" />
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">新增部门</button>
+      </div>
+    </form>
+  </div>
+ </div>
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">副会长设置（最多2人）</h5>
+    <form class="row g-3" method="post" action="{{ url_for('admin_departments.set_vice') }}">
+      <div class="col-md-6">
+        <label class="form-label">设为副会长的学号</label>
+        <input class="form-control" name="student_id" required />
+      </div>
+      <div class="col-md-6 d-flex align-items-end gap-2">
+        <button class="btn btn-outline-primary" type="submit">设为副会长</button>
+        <button class="btn btn-outline-warning" type="submit" formaction="{{ url_for('admin_departments.unset_vice') }}">取消副会长</button>
+      </div>
+    </form>
+  </div>
+ </div>
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">会长转让</h5>
+    <form class="row g-3" method="post" action="{{ url_for('admin_departments.transfer_president') }}">
+      <div class="col-md-6">
+        <label class="form-label">新会长学号</label>
+        <input class="form-control" name="student_id" required />
+      </div>
+      <div class="col-md-6 d-flex align-items-end">
+        <button class="btn btn-outline-danger" type="submit">转让会长</button>
+      </div>
+    </form>
+    <p class="text-muted mt-2">转让后，原会长将被调整为副会长（若副会长已满则调整为成员）。</p>
+  </div>
+ </div>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>ID</th><th>名称</th><th>描述</th><th>设置部长</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+    {% for d in items %}
+      <tr>
+        <td>{{ d.id }}</td>
+        <td>{{ d.name }}</td>
+        <td>{{ d.description }}</td>
+        <td>
+          <form method="post" action="{{ url_for('admin_departments.set_minister', dep_id=d.id) }}" class="d-inline">
+            <input type="text" name="student_id" placeholder="学号" class="form-control d-inline" style="width:200px" />
+            <button class="btn btn-sm btn-outline-primary" type="submit">设为部长</button>
+          </form>
+        </td>
+        <td>
+          <form method="post" action="{{ url_for('admin_departments.delete_department', dep_id=d.id) }}" class="d-inline">
+            <button class="btn btn-sm btn-outline-danger" type="submit">删除</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+ </div>
+{% endblock %}

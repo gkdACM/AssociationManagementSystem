@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2 class="mb-3">我的考试成绩</h2>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>考试</th><th>分数</th><th>通过</th><th>备注</th><th>时间</th></tr>
+    </thead>
+    <tbody>
+    {% for r in results %}
+      <tr>
+        <td>{{ r.exam.title if r.exam else r.exam_id }}</td>
+        <td>{{ r.score }}</td>
+        <td>{% if r.passed %}<span class="badge bg-success">是</span>{% else %}<span class="badge bg-secondary">否</span>{% endif %}</td>
+        <td>{{ r.remark }}</td>
+        <td>{{ r.created_at }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+ </div>
+{% endblock %}

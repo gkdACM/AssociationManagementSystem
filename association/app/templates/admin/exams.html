@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="m-0">考试列表</h2>
+</div>
+<div class="card mb-4">
+  <div class="card-body">
+    <form class="row g-3" method="post">
+      {{ form.hidden_tag() }}
+      <div class="col-md-4">
+        <label class="form-label">标题</label>
+        {{ form.title(class='form-control') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">日期</label>
+        {{ form.exam_date(class='form-control') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">部门</label>
+        {{ form.department_id(class='form-select') }}
+      </div>
+      <div class="col-md-8">
+        <label class="form-label">描述</label>
+        {{ form.description(class='form-control') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">及格线</label>
+        {{ form.pass_threshold(class='form-control') }}
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">新增考试</button>
+      </div>
+    </form>
+  </div>
+ </div>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>ID</th><th>标题</th><th>部门</th><th>日期</th><th>及格线</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+    {% for e in items %}
+      <tr>
+        <td>{{ e.id }}</td>
+        <td>{{ e.title }}</td>
+        <td>{{ e.department.name if e.department else '全协会' }}</td>
+        <td>{{ e.exam_date }}</td>
+        <td>{{ e.pass_threshold or '' }}</td>
+        <td class="text-nowrap">
+          <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin_exams.edit_exam', exam_id=e.id) }}">编辑</a>
+          <form method="post" action="{{ url_for('admin_exams.delete_exam', exam_id=e.id) }}" class="d-inline">
+            <button class="btn btn-sm btn-outline-danger" type="submit">删除</button>
+          </form>
+          <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin_exams.exam_results', exam_id=e.id) }}">成绩</a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+ </div>
+{% endblock %}

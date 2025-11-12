@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>协会管理系统</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="{{ url_for('home.index') }}">协会管理系统</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          {% if current_user %}
+            {% if current_user.role == 'president' %}
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_exams.exams') }}">考试管理</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_users.users') }}">会员管理</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_users.reviews') }}">审核</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_departments.departments') }}">部门管理</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('points.levels') }}">等级</a></li>
+            {% elif current_user.role == 'vice_president' %}
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_users.users') }}">会员列表</a></li>
+            {% elif current_user.role == 'minister' %}
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('leader_exams.exams') }}">本部门考试</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_changes.leader_department_changes') }}">部门更换审批</a></li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('member_exams.exams') }}">考试安排</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('member_exams.my_results') }}">我的成绩</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_changes.me_change_department') }}">部门申请</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_changes.me_leave') }}">退会申请</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('points.my_points') }}">我的积分</a></li>
+            {% endif %}
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('member_exams.exams') }}">考试安排</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('points.levels') }}">等级</a></li>
+          {% endif %}
+        </ul>
+        <ul class="navbar-nav">
+          {% if current_user %}
+          <li class="nav-item"><span class="navbar-text me-2"><i class="bi bi-person-circle me-1"></i>{{ current_user.name }}（{{ role_cn(current_user.role, current_user.department.name if current_user.department else None) }}）</span></li>
+          <li class="nav-item">
+            <form method="post" action="{{ url_for('auth.logout') }}">
+              <button class="btn btn-sm btn-outline-light" type="submit">退出</button>
+            </form>
+          </li>
+          {% else %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">登录</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.register') }}">注册</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container py-4 fade-in">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-info" role="alert">
+          {% for m in messages %}{{ m }}{% if not loop.last %}<br>{% endif %}{% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  ;(function(){
+    const links=[...document.querySelectorAll('a.nav-link')];
+    links.forEach(l=>{try{if(location.pathname===new URL(l.href).pathname){l.classList.add('active')}}catch(e){}})
+    let taps=0,timer=null,panel=null
+    function show(){
+      if(!panel){panel=document.createElement('div');panel.className='dev-panel';panel.innerHTML='<div class="d-flex justify-content-between align-items-center"><strong>开发者面板</strong><button class="btn btn-sm btn-outline-secondary">关闭</button></div><div class="mt-2"><a class="btn btn-sm btn-outline-dark me-2" href="/setup">配置中心</a><a class="btn btn-sm btn-outline-dark" href="/dev/seed">开发登录</a></div>';document.body.appendChild(panel);panel.querySelector('button').onclick=()=>panel.classList.remove('show')}
+      panel.classList.add('show')
+    }
+    const brand=document.querySelector('.navbar-brand');
+    if(brand){brand.addEventListener('click',()=>{if(window.innerWidth<768){taps++;clearTimeout(timer);timer=setTimeout(()=>{taps=0},800);if(taps>=5){taps=0;show()}}})}
+  })()
+  </script>
+  <script>
+  ;(function(){
+    const fine=window.matchMedia('(pointer:fine)').matches
+    if(!fine) return
+    const dots=[],count=24
+    for(let i=0;i<count;i++){
+      const d=document.createElement('div')
+      d.className='trail'
+      const s=12+i*0.8
+      d.style.width=s+'px'
+      d.style.height=s+'px'
+      d.style.opacity=(0.35+(i/count)*0.65).toFixed(2)
+      document.body.appendChild(d)
+      dots.push({el:d,x:innerWidth/2,y:innerHeight/2})
+    }
+    let mx=innerWidth/2,my=innerHeight/2
+    addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY})
+    function loop(){
+      let x=mx,y=my
+      for(let i=0;i<dots.length;i++){
+        const d=dots[i]
+        d.x+= (x-d.x)*0.28
+        d.y+= (y-d.y)*0.28
+        d.el.style.transform='translate3d('+(d.x-d.el.offsetWidth/2)+'px,'+(d.y-d.el.offsetHeight/2)+'px,0)'
+        x=d.x;y=d.y
+      }
+      requestAnimationFrame(loop)
+    }
+    loop()
+  })()
+  </script>
+ </body>
+</html>

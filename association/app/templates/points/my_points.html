@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2 class="mb-3">我的积分</h2>
+<p>总积分：<strong>{{ total }}</strong>{% if current_level %}（当前等级：{{ current_level.name }}）{% endif %}</p>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>来源</th><th>来源ID</th><th>积分</th><th>备注</th><th>时间</th></tr>
+    </thead>
+    <tbody>
+    {% for p in items %}
+      <tr>
+        <td>{{ p.source_type }}</td>
+        <td>{{ p.source_id }}</td>
+        <td>{{ p.points }}</td>
+        <td>{{ p.remark }}</td>
+        <td>{{ p.created_at }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+ </div>
+{% endblock %}

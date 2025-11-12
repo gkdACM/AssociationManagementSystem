@@ -1,0 +1,10 @@
+Flask
+Flask-JWT-Extended
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-WTF
+email-validator
+PyMySQL
+openpyxl
+bcrypt
+python-dotenv

@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="hero p-4 mb-4 text-center fade-in-up">
+  <h2 class="mb-2 hero-title">加入我们</h2>
+  <p class="text-muted">填写信息完成注册，审核通过后即可登录</p>
+</div>
+{% if error %}
+<div class="alert alert-danger fade-in-up">{{ error }}</div>
+{% endif %}
+<div class="card auth-card fade-in-up">
+  <div class="card-body">
+    <form class="row g-3" method="post">
+      {{ form.hidden_tag() }}
+      <div class="col-md-4">
+        <label class="form-label">姓名</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-person"></i></span>
+          {{ form.name(class='form-control') }}
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">学号</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+          {{ form.student_id(class='form-control') }}
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">班级</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-buildings"></i></span>
+          {{ form.class_name(class='form-control') }}
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">性别</label>
+        {{ form.gender(class='form-select') }}
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">年级</label>
+        {{ form.grade(class='form-control') }}
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">手机号</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-phone"></i></span>
+          {{ form.phone(class='form-control') }}
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">邮箱</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+          {{ form.email(class='form-control') }}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">部门</label>
+        {{ form.department_id(class='form-select') }}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">密码</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-lock"></i></span>
+          {{ form.password(class='form-control') }}
+        </div>
+      </div>
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-primary w-100" type="submit">提交注册</button>
+        <a class="btn btn-outline-secondary w-100" href="{{ url_for('auth.login') }}">去登录</a>
+      </div>
+    </form>
+    <p class="mt-3 text-muted">注册后需审核通过才能登录。</p>
+  </div>
+ </div>
+{% endblock %}

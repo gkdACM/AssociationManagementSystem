@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2 class="mb-3">部门更换审批（部长端）</h2>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>用户ID</th><th>当前部门ID</th><th>目标部门ID</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+    {% for h in items %}
+      <tr>
+        <td>{{ h.user_id }}</td>
+        <td>{{ h.changes['department_id']['old'] }}</td>
+        <td>{{ h.changes['department_id']['new'] }}</td>
+        <td class="text-nowrap">
+          <form method="post" action="{{ url_for('profile_changes.leader_department_approve', hist_id=h.id) }}" class="d-inline">
+            <button class="btn btn-sm btn-primary" type="submit">通过</button>
+          </form>
+          <form method="post" action="{{ url_for('profile_changes.leader_department_reject', hist_id=h.id) }}" class="d-inline">
+            <input type="text" name="reason" placeholder="理由" class="form-control d-inline" style="width:200px" />
+            <button class="btn btn-sm btn-danger" type="submit">驳回</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+ </div>
+{% endblock %}
+

@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="error-contrast">
+  <h2 class="mb-3">未登录或会话已过期</h2>
+  {% if reason %}<p class="text-muted">{{ reason }}</p>{% endif %}
+  <p>请先登录后再访问此页面。</p>
+  <a class="btn btn-primary" href="{{ url_for('auth.login') }}">前往登录</a>
+</div>
+{% endblock %}

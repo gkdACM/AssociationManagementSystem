@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="p-4 mb-3 bg-light rounded-3">
+  <h2 class="mb-2">首页</h2>
+  <p class="mb-0">欢迎使用协会管理系统。</p>
+</div>
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">管理端</h5>
+        <p class="card-text">考试创建、编辑、删除，成绩录入与导入导出。</p>
+        <a class="btn btn-primary" href="{{ url_for('admin_exams.exams') }}">进入考试管理</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">部长端</h5>
+        <p class="card-text">本部门考试与成绩维护。</p>
+        <a class="btn btn-primary" href="{{ url_for('leader_exams.exams') }}">进入本部门考试</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">成员端</h5>
+        <p class="card-text">查看考试安排与个人成绩。</p>
+        <a class="btn btn-outline-secondary me-2" href="{{ url_for('member_exams.exams') }}">考试安排</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('member_exams.my_results') }}">我的成绩</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">开发辅助</h5>
+        <p class="card-text">初始化数据并登录管理员。</p>
+        <a class="btn btn-outline-dark" href="{{ url_for('dev.seed') }}">初始化并登录</a>
+      </div>
+    </div>
+  </div>
+ </div>
+{% endblock %}

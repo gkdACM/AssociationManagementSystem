@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2 class="mb-3">部门更换申请</h2>
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+{% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+<div class="card">
+  <div class="card-body">
+    <form class="row g-3" method="post">
+      {{ form.hidden_tag() }}
+      <div class="col-md-6">
+        <label class="form-label">目标部门</label>
+        {{ form.target_department_id(class='form-select') }}
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">提交申请</button>
+      </div>
+    </form>
+  </div>
+ </div>
+{% endblock %}
+

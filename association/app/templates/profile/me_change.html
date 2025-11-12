@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2 class="mb-3">资料变更申请</h2>
+<div class="card">
+  <div class="card-body">
+    <form class="row g-3" method="post">
+      {{ form.hidden_tag() }}
+      <div class="col-md-4"><label class="form-label">姓名</label>{{ form.name(class='form-control') }}</div>
+      <div class="col-md-4"><label class="form-label">班级</label>{{ form.class_name(class='form-control') }}</div>
+      <div class="col-md-4"><label class="form-label">性别</label>{{ form.gender(class='form-select') }}</div>
+      <div class="col-md-4"><label class="form-label">年级</label>{{ form.grade(class='form-control') }}</div>
+      <div class="col-md-4"><label class="form-label">手机号</label>{{ form.phone(class='form-control') }}</div>
+      <div class="col-md-4"><label class="form-label">邮箱</label>{{ form.email(class='form-control') }}</div>
+      <div class="col-12"><button class="btn btn-primary" type="submit">提交申请</button></div>
+    </form>
+  </div>
+ </div>
+{% endblock %}
+

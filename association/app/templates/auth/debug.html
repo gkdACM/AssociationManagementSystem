@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2 class="mb-3">认证调试</h2>
+<p>JWT Identity：<code>{{ uid or 'None' }}</code></p>
+{% if user %}
+<ul>
+  <li>学号：{{ user.student_id }}</li>
+  <li>姓名：{{ user.name }}</li>
+  <li>角色：{{ user.role }}</li>
+  <li>审核状态：{{ user.registration_status }}</li>
+</ul>
+{% else %}
+<p>未登录或 Cookie 未携带。</p>
+{% endif %}
+{% endblock %}
+

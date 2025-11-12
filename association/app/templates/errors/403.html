@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="error-contrast">
+  <h2 class="mb-3">权限不足</h2>
+  {% if reason %}<p class="text-muted">{{ reason }}</p>{% endif %}
+  <p>如需访问管理端功能，请使用具备会长、副会长或部长权限的账号登录。</p>
+  <a class="btn btn-primary" href="{{ url_for('auth.login') }}">切换账号</a>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="hero p-4 mb-4 text-center fade-in-up">
+  <h2 class="mb-2 hero-title">欢迎登录</h2>
+  <p class="text-muted">大学计算机协会会员管理系统</p>
+</div>
+{% if error %}
+<div class="alert alert-danger fade-in-up">{{ error }}</div>
+{% endif %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card auth-card fade-in-up">
+      <div class="card-body">
+        <form class="row g-3" method="post">
+          {{ form.hidden_tag() }}
+          <div class="col-12">
+            <label class="form-label">学号</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+              {{ form.student_id(class='form-control') }}
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label">密码</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              {{ form.password(class='form-control') }}
+            </div>
+          </div>
+          <div class="col-12 d-flex gap-2">
+            <button class="btn btn-primary w-100" type="submit">登录</button>
+            <a class="btn btn-outline-secondary w-100" href="{{ url_for('auth.register') }}">注册</a>
+          </div>
+          <div class="col-12 text-center">
+            <a class="link-muted" href="{{ url_for('auth.register') }}">没有账号？立即注册</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+ </div>
+{% endblock %}
