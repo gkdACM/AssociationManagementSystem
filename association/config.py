@@ -13,7 +13,7 @@ class Config:
     JWT_COOKIE_SECURE = False
     JWT_COOKIE_SAMESITE = 'Lax'
     JWT_ACCESS_COOKIE_PATH = '/'
-    JWT_COOKIE_CSRF_PROTECT = False
+    JWT_COOKIE_CSRF_PROTECT = True
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=12)
     WTF_CSRF_ENABLED = True
 

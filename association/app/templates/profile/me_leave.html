@@ -5,6 +5,7 @@
 <div class="card">
   <div class="card-body">
     <form method="post" class="row g-3">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="col-12">
         <label class="form-label">退会原因（可选）</label>
         <input class="form-control" name="reason" maxlength="255" />

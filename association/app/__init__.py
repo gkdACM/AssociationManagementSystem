@@ -1,6 +1,6 @@
 from flask import Flask
 from association.config import Config
-from association.app.extensions import db, migrate, jwt
+from association.app.extensions import db, migrate, jwt, csrf
 from association.app.views.admin_competitions import bp as admin_competitions_bp
 from association.app.views.leader_competitions import bp as leader_competitions_bp
 from association.app.views.member_competitions import bp as member_competitions_bp
@@ -24,6 +24,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    csrf.init_app(app)
     @jwt.unauthorized_loader
     def _unauthorized(reason):
         return render_template('errors/401.html', reason=reason), 401

@@ -41,6 +41,7 @@
 <div class="card mb-3">
   <div class="card-body">
     <form class="row g-3" method="post" action="{{ url_for('admin_users.disable_by_grade') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="col-md-4">
         <label class="form-label">按年级批量禁用</label>
         <select class="form-select" name="grade" required>
@@ -75,13 +76,16 @@
         <td>{% if u.is_active %}<span class="badge bg-success">启用</span>{% else %}<span class="badge bg-secondary">禁用</span>{% endif %}</td>
         <td>
           <form method="post" action="{{ url_for('admin_users.disable_user', user_id=u.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <button class="btn btn-sm btn-outline-warning" type="submit">切换启用</button>
           </form>
           <form method="post" action="{{ url_for('admin_users.delete_user', user_id=u.id) }}" class="mt-1" onsubmit="return confirm('确认删除 {{ u.name }}（{{ u.student_id }}）？该操作不可撤销。')">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <button class="btn btn-sm btn-outline-danger" type="submit">删除</button>
           </form>
           {% if current_user and current_user.role in ['president','vice_president'] %}
           <form method="post" action="{{ url_for('admin_users.reset_password', user_id=u.id) }}" class="mt-1" onsubmit="return confirm('确认将 {{ u.name }}（{{ u.student_id }}） 的密码重置为 123456？重置后登录需修改密码。')">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <button class="btn btn-sm btn-outline-secondary" type="submit">重置密码</button>
           </form>
           {% endif %}

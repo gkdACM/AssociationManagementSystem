@@ -49,6 +49,7 @@
         <td class="text-nowrap">
           <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin_exams.edit_exam', exam_id=e.id) }}">编辑</a>
           <form method="post" action="{{ url_for('admin_exams.delete_exam', exam_id=e.id) }}" class="d-inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <button class="btn btn-sm btn-outline-danger" type="submit">删除</button>
           </form>
           <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin_exams.exam_results', exam_id=e.id) }}">成绩</a>
