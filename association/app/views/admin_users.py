@@ -28,6 +28,8 @@ def users():
 def disable_user(user_id):
     u = db.session.get(User, user_id)
     if u:
+        if u.role in ('president', 'vice_president'):
+            return redirect(url_for('admin_users.users'))
         u.is_active = not u.is_active
         u.updated_at = datetime.utcnow()
         db.session.commit()
@@ -96,7 +98,7 @@ def disable_by_grade():
     grade = request.form.get('grade')
     if grade:
         now = datetime.utcnow()
-        db.session.query(User).filter(User.grade == grade).update({'is_active': False, 'updated_at': now})
+        db.session.query(User).filter(User.grade == grade, User.role.notin_(('president','vice_president'))).update({'is_active': False, 'updated_at': now})
         db.session.commit()
     return redirect(url_for('admin_users.users', grade=grade))
 

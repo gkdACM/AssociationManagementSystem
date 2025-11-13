@@ -107,3 +107,79 @@
 - 使用 WSGI 服务器（gunicorn / uWSGI）与反向代理（Nginx）
 - 配置环境变量与安全密钥；禁用调试模式
 - 数据库连接池参数按业务并发合理设置；监控连接与超时日志
+
+## 服务器部署
+- 克隆到指定目录（示例路径 `/root/.yh/`）
+  ```bash
+  ssh root@服务器IP
+  mkdir -p /root/.yh && cd /root/.yh
+  git clone https://github.com/gkdACM/AssociationManagementSystem.git
+  cd /root/.yh/AssociationManagementSystem
+  ```
+- 安装系统依赖（按发行版选择）
+  - Debian/Ubuntu
+    ```bash
+    apt-get update && apt-get install -y python3-venv python3-dev build-essential git mysql-client
+    ```
+  - CentOS/RHEL
+    ```bash
+    yum install -y python3 python3-venv python3-devel gcc git mysql
+    ```
+- 创建虚拟环境与安装依赖
+  ```bash
+  python3 -m venv .venv
+  source .venv/bin/activate
+  pip install --upgrade pip
+  pip install -r requirements.txt
+  ```
+- 配置数据库与环境变量
+  ```bash
+  mysql -uroot -p -e "CREATE DATABASE IF NOT EXISTS association DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+  ```
+  在项目根创建 `.env`：
+  ```env
+  SECRET_KEY=your-secret
+  JWT_SECRET_KEY=your-jwt-secret
+  DATABASE_URL=mysql+pymysql://root:toor@localhost:3306/association?charset=utf8mb4
+  ```
+- 数据迁移与初始化
+  ```bash
+  FLASK_APP=association/wsgi.py .venv/bin/flask db upgrade
+  ```
+- 启动服务（临时）
+  ```bash
+  FLASK_APP=association/wsgi.py FLASK_DEBUG=0 .venv/bin/flask run --host 0.0.0.0 --port 5050
+  ```
+- 使用 gunicorn（推荐）
+  ```bash
+  pip install gunicorn
+  GUNICORN_CMD_ARGS="--bind 0.0.0.0:5050 --workers 3" .venv/bin/gunicorn association.wsgi:app
+  ```
+- 可选：systemd 服务
+  在 `/etc/systemd/system/assoc.service` 写入：
+  ```ini
+  [Unit]
+  Description=Association Management System
+  After=network.target
+  [Service]
+  WorkingDirectory=/root/.yh/AssociationManagementSystem
+  Environment="FLASK_APP=association/wsgi.py"
+  Environment="PYTHONUNBUFFERED=1"
+  ExecStart=/root/.yh/AssociationManagementSystem/.venv/bin/gunicorn association.wsgi:app --bind 0.0.0.0:5050 --workers 3
+  Restart=always
+  User=root
+  Group=root
+  [Install]
+  WantedBy=multi-user.target
+  ```
+  启用与运行：
+  ```bash
+  systemctl daemon-reload
+  systemctl enable assoc
+  systemctl start assoc
+  systemctl status assoc
+  ```
+- 访问与初始化
+  - 管理入口：`http://<服务器IP>:5050/`
+  - 初次配置与创建会长：`/setup`
+  - 或开发辅助登录：`/dev/seed`

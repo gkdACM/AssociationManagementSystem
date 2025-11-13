@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="page-table-white">
+<div class="page-table-white page-departments">
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2 class="m-0 page-title">部门管理</h2>
 </div>
@@ -54,12 +54,11 @@
 <div class="table-responsive">
   <table class="table table-striped align-middle">
     <thead>
-      <tr><th>ID</th><th>名称</th><th>描述</th><th>设置部长</th><th>操作</th></tr>
+      <tr><th>名称</th><th>描述</th><th>设置部长</th><th>操作</th></tr>
     </thead>
     <tbody>
     {% for d in items %}
       <tr>
-        <td>{{ d.id }}</td>
         <td>{{ d.name }}</td>
         <td>{{ d.description }}</td>
         <td>
