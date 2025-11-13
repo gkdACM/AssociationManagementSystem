@@ -77,4 +77,3 @@ def create_app():
         return render_template('errors/403.html', reason='权限不足'), 403
 
     return app
-    return app
