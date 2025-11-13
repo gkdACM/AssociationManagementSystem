@@ -6,6 +6,7 @@
   <div class="d-flex gap-2">
     <a class="btn btn-outline-success" href="{{ url_for('admin_users.export_users') }}">导出 CSV</a>
     <form method="post" action="{{ url_for('admin_users.import_users') }}" enctype="multipart/form-data" class="d-inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <input type="file" name="file" class="form-control d-inline" style="width:240px" />
       <button class="btn btn-outline-secondary" type="submit">导入 CSV</button>
     </form>
