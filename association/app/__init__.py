@@ -74,7 +74,7 @@ def create_app():
 
     @app.errorhandler(403)
     def handle_forbidden(e):
-        return render_template('errors/403.html', reason='权限不足：需要会长或部长权限'), 403
+        return render_template('errors/403.html', reason='权限不足'), 403
 
     return app
     return app
