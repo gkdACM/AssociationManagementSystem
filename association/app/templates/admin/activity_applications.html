@@ -3,6 +3,7 @@
 <div class="page-table-white">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="m-0 page-title">{{ activity.name }} 报名情况</h2>
+    <a class="btn btn-outline-success" href="{{ url_for('admin_activities.export_applications', act_id=activity.id) }}">导出已通过 CSV</a>
   </div>
   <div class="table-responsive">
     <table class="table table-striped align-middle">

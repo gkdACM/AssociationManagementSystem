@@ -39,3 +39,22 @@ def applications(act_id):
     for ap in apps:
         ap.user = db.session.get(User, ap.user_id)
     return render_template('admin/activity_applications.html', activity=a, apps=apps)
+
+@bp.route('/activities/<int:act_id>/applications/export', methods=['GET'])
+@roles_required('president','vice_president')
+def export_applications(act_id):
+    a = db.session.get(Activity, act_id)
+    if not a:
+        return redirect(url_for('admin_activities.activities'))
+    items = ActivityApplication.query.filter_by(activity_id=a.id, status='approved').order_by(ActivityApplication.applied_at.asc()).all()
+    import io, csv
+    output = io.StringIO()
+    w = csv.writer(output)
+    w.writerow(['student_id','name','department','applied_at','decided_at'])
+    for ap in items:
+        u = db.session.get(User, ap.user_id)
+        dep = u.department.name if u and u.department else ''
+        w.writerow([u.student_id if u else '', u.name if u else '', dep, ap.applied_at, ap.decided_at])
+    output.seek(0)
+    from flask import send_file
+    return send_file(io.BytesIO(output.getvalue().encode('utf-8')), mimetype='text/csv', as_attachment=True, download_name=f'activity_{act_id}_approved.csv')
