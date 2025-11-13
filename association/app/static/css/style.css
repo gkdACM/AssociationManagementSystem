@@ -1,6 +1,6 @@
-:root{--brand:#3f51b5;--brand2:#7c4dff;--accent:#00bcd4;--success:#2ecc71;--danger:#e74c3c;--text:#1f2937;--muted:#6b7280}
+:root{--brand:#3f51b5;--brand2:#7c4dff;--accent:#00bcd4;--success:#22c55e;--danger:#ef4444;--text:#e5e7eb;--muted:#94a3b8;--glass:rgba(20,26,46,.72)}
 html,body{height:100%}
-body{background:linear-gradient(135deg,#0b1025 0%,#151a33 40%,#20254a 100%);color:var(--text);background-size:400% 400%;animation:gradientShift 18s ease infinite;position:relative}
+body{background:linear-gradient(135deg,#0b1025 0%,#151a33 40%,#20254a 100%);color:var(--text);background-size:400% 400%;animation:gradientShift 18s ease infinite;position:relative;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
 body::before{content:"";position:fixed;inset:-10% -10% -10% -10%;pointer-events:none;background:radial-gradient(1200px 600px at 20% 15%,rgba(124,77,255,.18),rgba(124,77,255,0)),radial-gradient(900px 500px at 80% 85%,rgba(0,229,255,.14),rgba(0,229,255,0));mix-blend-mode:screen;z-index:0}
 .navbar{background:linear-gradient(90deg,rgba(63,81,181,.95),rgba(124,77,255,.95))!important;box-shadow:0 8px 24px rgba(63,81,181,.18)}
 .navbar-brand{letter-spacing:.5px}
@@ -9,12 +9,15 @@ body::before{content:"";position:fixed;inset:-10% -10% -10% -10%;pointer-events:
 .container.fade-in{animation:fadeInUp .4s ease both}
 @keyframes fadeInUp{from{opacity:0;transform:translate3d(0,8px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-.card{border:1px solid #30364d;border-radius:16px;background:rgba(20,26,46,.72);color:#e5e7eb;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .2s ease,box-shadow .2s ease}
+.card{border:1px solid #30364d;border-radius:16px;background:var(--glass);color:#e5e7eb;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .2s ease,box-shadow .2s ease}
 .card:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.35)}
 .card-header{border-bottom:1px solid #30364d;background:linear-gradient(90deg,rgba(63,81,181,.35),rgba(124,77,255,.35));color:#e5e7eb}
 .btn{border-radius:10px;transition:transform .12s ease,box-shadow .12s ease}
 .btn:active{transform:scale(.98)}
 .btn-primary{background:linear-gradient(90deg,var(--brand),var(--brand2));border:none;box-shadow:0 8px 20px rgba(63,81,181,.25)}
+.btn-outline-primary:hover{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#fff;border-color:transparent}
+.btn-outline-secondary:hover{background:linear-gradient(90deg,#64748b,#94a3b8);color:#fff;border-color:transparent}
+.btn-outline-danger:hover{background:linear-gradient(90deg,#ef4444,#f87171);color:#fff;border-color:transparent}
 .btn-outline-secondary,.btn-outline-success,.btn-outline-danger,.btn-outline-warning{border-width:2px}
 .table{border-radius:12px;overflow:hidden}
 .table thead th{background:#0f172a;color:#cbd5e1}
@@ -32,6 +35,7 @@ body::before{content:"";position:fixed;inset:-10% -10% -10% -10%;pointer-events:
 .hero{background:linear-gradient(135deg,rgba(63,81,181,.08),rgba(124,77,255,.08));border-radius:20px}
 .icon-xl{font-size:1.25rem}
 .hero-title{background:linear-gradient(90deg,var(--brand),var(--brand2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.page-title{background:linear-gradient(90deg,var(--brand),var(--brand2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .auth-card{backdrop-filter:saturate(180%) blur(4px)}
 .fade-in-up{animation:fadeInUp .4s ease both}
 .input-group-text{background:#1f253c;border:1px solid #30364d;color:#cbd5e1}
@@ -56,5 +60,7 @@ body::before{content:"";position:fixed;inset:-10% -10% -10% -10%;pointer-events:
 /* departments page header high contrast */
 .page-departments .table thead th{color:#f8fafc}
 .page-users .table thead th{color:#f8fafc}
-.
-.
+.home-hero{padding:2.5rem;border-radius:24px;background:linear-gradient(135deg,rgba(63,81,181,.22),rgba(124,77,255,.18));box-shadow:0 12px 36px rgba(63,81,181,.25)}
+.home-hero h2{font-size:2rem}
+.feature-card{border:1px solid #30364d;border-radius:16px;background:var(--glass);padding:1rem;transition:transform .2s ease,box-shadow .2s ease}
+.feature-card:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(0,0,0,.4)}

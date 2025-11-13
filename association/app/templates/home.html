@@ -1,53 +1,45 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="p-4 mb-3 bg-light rounded-3">
-  <h2 class="mb-2">首页</h2>
-  <p class="mb-0">欢迎使用协会管理系统。</p>
+<div class="home-hero mb-4">
+  <h2 class="mb-2 hero-title">协会管理系统</h2>
+  <p class="mb-0">统一的竞赛、项目与会员管理平台，轻松协作，高效运维。</p>
 </div>
 <div class="row g-3">
   <div class="col-md-6">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">管理端</h5>
-        <p class="card-text">竞赛创建、编辑、删除，成绩录入与导入导出。</p>
-        <a class="btn btn-primary" href="{{ url_for('admin_competitions.competitions') }}">进入竞赛管理</a>
+    <div class="feature-card h-100">
+      <h5 class="mb-2">管理端</h5>
+      <p class="mb-3">竞赛创建与成绩管理，支持导入导出。</p>
+      <a class="btn btn-primary" href="{{ url_for('admin_competitions.competitions') }}">进入竞赛管理</a>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="feature-card h-100">
+      <h5 class="mb-2">部长端</h5>
+      <p class="mb-3">本部门竞赛与成绩维护；项目管理与验收。</p>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" href="{{ url_for('leader_competitions.competitions') }}">本部门竞赛</a>
+        <a class="btn btn-outline-primary" href="{{ url_for('leader_projects.projects') }}">项目管理</a>
+        <a class="btn btn-outline-primary" href="{{ url_for('leader_projects.acceptances') }}">项目验收</a>
       </div>
     </div>
   </div>
   <div class="col-md-6">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">部长端</h5>
-        <p class="card-text">本部门竞赛与成绩维护；项目管理与验收。</p>
-        <div class="d-flex flex-wrap gap-2">
-          <a class="btn btn-primary" href="{{ url_for('leader_competitions.competitions') }}">本部门竞赛</a>
-          <a class="btn btn-outline-primary" href="{{ url_for('leader_projects.projects') }}">项目管理</a>
-          <a class="btn btn-outline-primary" href="{{ url_for('leader_projects.acceptances') }}">项目验收</a>
-        </div>
+    <div class="feature-card h-100">
+      <h5 class="mb-2">成员端</h5>
+      <p class="mb-3">查看竞赛安排与个人成绩；项目报名与我的项目。</p>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-secondary" href="{{ url_for('member_competitions.competitions') }}">竞赛安排</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('member_competitions.my_competitions') }}">我的竞赛</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('member_projects.projects') }}">项目</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('member_projects.my_projects') }}">我的项目</a>
       </div>
     </div>
   </div>
   <div class="col-md-6">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">成员端</h5>
-        <p class="card-text">查看竞赛安排与个人成绩；项目报名与我的项目。</p>
-        <div class="d-flex flex-wrap gap-2">
-          <a class="btn btn-outline-secondary" href="{{ url_for('member_competitions.competitions') }}">竞赛安排</a>
-          <a class="btn btn-outline-secondary" href="{{ url_for('member_competitions.my_competitions') }}">我的竞赛</a>
-          <a class="btn btn-outline-secondary" href="{{ url_for('member_projects.projects') }}">项目</a>
-          <a class="btn btn-outline-secondary" href="{{ url_for('member_projects.my_projects') }}">我的项目</a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">开发辅助</h5>
-        <p class="card-text">初始化数据并登录管理员。</p>
-        <a class="btn btn-outline-dark" href="{{ url_for('dev.seed') }}">初始化并登录</a>
-      </div>
+    <div class="feature-card h-100">
+      <h5 class="mb-2">开发辅助</h5>
+      <p class="mb-3">初始化数据并登录管理员。</p>
+      <a class="btn btn-outline-dark" href="{{ url_for('dev.seed') }}">初始化并登录</a>
     </div>
   </div>
  </div>
