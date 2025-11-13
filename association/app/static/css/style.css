@@ -64,3 +64,5 @@ body::before{content:"";position:fixed;inset:-10% -10% -10% -10%;pointer-events:
 .home-hero h2{font-size:2rem}
 .feature-card{border:1px solid #30364d;border-radius:16px;background:var(--glass);padding:1rem;transition:transform .2s ease,box-shadow .2s ease}
 .feature-card:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(0,0,0,.4)}
+.leaders-card{background:var(--glass);color:#f8fafc}
+.leaders-card .text-muted{color:#f8fafc}
