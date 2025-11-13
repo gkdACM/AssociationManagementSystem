@@ -18,9 +18,21 @@
         <td>
           {% set applied = parts.get(p.id) %}
           {% if applied %}
-            {% if applied.status == 'pending' %}<span class="badge bg-secondary">待审核</span>
-            {% elif applied.status == 'approved' %}<span class="badge bg-success">已加入</span>
-            {% else %}<span class="badge bg-secondary">未通过</span>{% endif %}
+            {% if applied.status == 'pending' %}
+              <span class="badge bg-secondary">待审核</span>
+              <form method="post" action="{{ url_for('member_projects.withdraw', project_id=p.id) }}" class="d-inline ms-2">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <button class="btn btn-sm btn-outline-danger" type="submit">撤回报名</button>
+              </form>
+            {% elif applied.status == 'approved' %}
+              <span class="badge bg-success">已加入</span>
+              <form method="post" action="{{ url_for('member_projects.withdraw', project_id=p.id) }}" class="d-inline ms-2" onsubmit="return confirm('确认退出该项目？')">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <button class="btn btn-sm btn-outline-danger" type="submit">退出项目</button>
+              </form>
+            {% else %}
+              <span class="badge bg-secondary">未通过</span>
+            {% endif %}
           {% else %}
             <form method="post" action="{{ url_for('member_projects.apply', project_id=p.id) }}">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />

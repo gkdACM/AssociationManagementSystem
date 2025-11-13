@@ -17,6 +17,7 @@
           <td>{{ a.event_date }}</td>
           <td>
             <a class="btn btn-sm btn-outline-primary" href="{{ url_for('leader_activities.applications', act_id=a.id) }}">报名审核</a>
+            <a class="btn btn-sm btn-outline-warning" href="{{ url_for('leader_activities.penalties', act_id=a.id) }}">扣分录入</a>
           </td>
         </tr>
       {% endfor %}

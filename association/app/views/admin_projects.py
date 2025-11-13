@@ -72,11 +72,19 @@ def submit_project(project_id):
 @roles_required('president', 'vice_president')
 def audit_project(project_id):
     action = request.form.get('action')
+    points = request.form.get('points', type=int)
     proj = db.session.get(Project, project_id)
     if proj and proj.status == 'pending_acceptance':
         if action == 'approve':
             proj.status = 'accepted'
             proj.end_date = date.today()
+            # 给已通过的参与者增加积分
+            if points and points > 0:
+                from association.app.models.project import ProjectParticipation
+                from association.app.models.points import PointsLedger
+                parts = ProjectParticipation.query.filter_by(project_id=project_id, status='approved').all()
+                for part in parts:
+                    db.session.add(PointsLedger(user_id=part.user_id, source_type='manual', source_id=project_id, points=points, remark=f'项目[{proj.name}]通过奖励'))
         else:
             proj.status = 'rejected'
         proj.updated_at = datetime.utcnow()

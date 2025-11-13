@@ -15,10 +15,14 @@ def activities():
     form.department_id.choices = [(0, '不指定')] + [(d.id, d.name) for d in Department.query.order_by(Department.name).all()]
     if request.method == 'POST' and form.validate_on_submit():
         dep_id = form.data['department_id'] or 0
+        leader = None
+        if form.data['leader_student_id']:
+            leader = User.query.filter_by(student_id=form.data['leader_student_id']).first()
         a = Activity(
             name=form.data['name'],
             description=form.data['description'],
             department_id=None if dep_id == 0 else dep_id,
+            leader_user_id=leader.id if leader else None,
             event_date=form.data['event_date'],
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),

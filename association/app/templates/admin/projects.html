@@ -76,6 +76,7 @@
             <form method="post" action="{{ url_for('admin_projects.audit_project', project_id=p.id) }}" class="d-inline">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
               <input type="hidden" name="action" value="approve" />
+              <input type="number" name="points" class="form-control d-inline" style="width:120px" placeholder="奖励积分" />
               <button class="btn btn-sm btn-outline-success" type="submit">通过</button>
             </form>
             <form method="post" action="{{ url_for('admin_projects.audit_project', project_id=p.id) }}" class="d-inline">

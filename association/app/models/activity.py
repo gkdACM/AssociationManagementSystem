@@ -6,10 +6,12 @@ class Activity(db.Model):
     name = db.Column(db.String(128), nullable=False)
     description = db.Column(db.String(255))
     department_id = db.Column(db.BigInteger, db.ForeignKey('department.id'))
+    leader_user_id = db.Column(db.BigInteger, db.ForeignKey('user.id'))
     event_date = db.Column(db.Date, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime, nullable=False)
     department = db.relationship('Department', backref=db.backref('activities', lazy='dynamic'))
+    leader = db.relationship('User', backref=db.backref('leading_activities', lazy='dynamic'), foreign_keys=[leader_user_id])
 
 class ActivityApplication(db.Model):
     __tablename__ = 'activity_application'

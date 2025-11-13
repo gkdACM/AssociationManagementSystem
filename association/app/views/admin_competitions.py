@@ -6,6 +6,7 @@ from association.app.extensions import db
 from association.app.models.user import User, Department
 from association.app.models.competition import Competition, CompetitionResult
 from association.app.forms.competition import CompetitionForm, CompetitionResultForm, CompetitionImportForm
+from association.app.models.points import PointsLedger
 from association.app.utils.auth import roles_required
 
 bp = Blueprint('admin_competitions', __name__, url_prefix='/admin')
@@ -127,6 +128,15 @@ def competition_results(comp_id):
                     updated_at=datetime.utcnow(),
                 )
                 db.session.add(res)
+            # 奖励积分：由管理员在备注中写明分值或使用固定映射，这里示例从 award 文本中提取数字（格式“+10”）
+            try:
+                import re
+                m = re.search(r"([+-]?\d+)", form.data['remark'] or '')
+                pts = int(m.group(1)) if m else None
+                if pts:
+                    db.session.add(PointsLedger(user_id=user.id, source_type='manual', source_id=comp.id, points=pts, remark=f'竞赛[{comp.name}]奖励'))
+            except Exception:
+                pass
             db.session.commit()
             return redirect(url_for('admin_competitions.competition_results', comp_id=comp_id))
     results = CompetitionResult.query.filter_by(competition_id=comp.id).order_by(CompetitionResult.created_at.desc()).all()

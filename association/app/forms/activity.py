@@ -7,3 +7,4 @@ class ActivityForm(FlaskForm):
     description = TextAreaField(validators=[Optional()])
     department_id = SelectField(coerce=int, validators=[Optional()])
     event_date = DateField(validators=[DataRequired()])
+    leader_student_id = StringField(validators=[Optional()])

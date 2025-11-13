@@ -28,10 +28,20 @@ def apply(project_id):
             db.session.commit()
     return redirect(url_for('member_projects.projects'))
 
+@bp.route('/projects/<int:project_id>/withdraw', methods=['POST'])
+@jwt_required()
+def withdraw(project_id):
+    user = get_current_user_optional()
+    part = ProjectParticipation.query.filter_by(project_id=project_id, user_id=user.id).first()
+    if part and part.status in ('pending','approved'):
+        part.status = 'rejected'
+        part.decided_at = datetime.utcnow()
+        db.session.commit()
+    return redirect(url_for('member_projects.projects'))
+
 @bp.route('/my/projects')
 @jwt_required()
 def my_projects():
     user = get_current_user_optional()
     parts = ProjectParticipation.query.filter_by(user_id=user.id).order_by(ProjectParticipation.applied_at.desc()).all()
     return render_template('member/my_projects.html', parts=parts)
-

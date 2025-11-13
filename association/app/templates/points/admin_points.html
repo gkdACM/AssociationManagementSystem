@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="m-0 page-title">积分总览</h2>
+    <form method="get" class="d-flex align-items-center gap-2">
+      <select name="grade" class="form-select" style="width:160px">
+        <option value="">全部届</option>
+        {% for g in grades %}
+          <option value="{{ g }}" {% if current_grade == g %}selected{% endif %}>{{ g }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn btn-outline-primary" type="submit">筛选</button>
+    </form>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr><th>学号</th><th>姓名</th><th>届</th><th>部门</th><th>积分</th></tr>
+      </thead>
+      <tbody>
+      {% for u in users %}
+        <tr>
+          <td>{{ u.student_id }}</td>
+          <td>{{ u.name }}</td>
+          <td>{{ u.grade }}</td>
+          <td>{{ u.department.name if u.department else '' }}</td>
+          <td>{{ totals[u.id] }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
