@@ -23,6 +23,7 @@
             {% else %}<span class="badge bg-secondary">未通过</span>{% endif %}
           {% else %}
             <form method="post" action="{{ url_for('member_projects.apply', project_id=p.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
               <button class="btn btn-sm btn-outline-primary" type="submit">报名参与</button>
             </form>
           {% endif %}
