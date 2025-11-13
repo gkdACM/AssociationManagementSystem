@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="m-0 page-title">{{ activity.name }} 报名情况</h2>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr><th>学号</th><th>姓名</th><th>部门</th><th>状态</th></tr>
+      </thead>
+      <tbody>
+      {% for ap in apps %}
+        <tr>
+          <td>{{ ap.user.student_id if ap.user else '' }}</td>
+          <td>{{ ap.user.name if ap.user else '' }}</td>
+          <td>{{ ap.user.department.name if ap.user and ap.user.department else '' }}</td>
+          <td>{{ ap.status }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

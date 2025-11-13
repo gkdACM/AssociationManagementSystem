@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="m-0 page-title">我的活动</h2>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr><th>名称</th><th>日期</th><th>状态</th></tr>
+      </thead>
+      <tbody>
+      {% for ap in apps %}
+        <tr>
+          <td>{{ ap.activity.name if ap.activity else '' }}</td>
+          <td>{{ ap.activity.event_date if ap.activity else '' }}</td>
+          <td>
+            {% if ap.status == 'pending' %}<span class="badge bg-secondary">待审核</span>
+            {% elif ap.status == 'approved' %}<span class="badge bg-success">已录取</span>
+            {% else %}<span class="badge bg-secondary">未通过</span>{% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

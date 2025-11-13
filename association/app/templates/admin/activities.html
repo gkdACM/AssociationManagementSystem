@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="m-0 page-title">活动管理</h2>
+  </div>
+  <div class="card mb-4">
+    <div class="card-body">
+      <form class="row g-3" method="post">
+        {{ form.hidden_tag() }}
+        <div class="col-md-4">
+          <label class="form-label">活动名称</label>
+          {{ form.name(class='form-control') }}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">日期</label>
+          {{ form.event_date(class='form-control') }}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">部门（可选）</label>
+          {{ form.department_id(class='form-select') }}
+        </div>
+        <div class="col-12">
+          <label class="form-label">描述</label>
+          {{ form.description(class='form-control') }}
+        </div>
+        <div class="col-12">
+          <button class="btn btn-primary" type="submit">创建活动</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>部门</th><th>日期</th><th>操作</th></tr>
+      </thead>
+      <tbody>
+      {% for a in items %}
+        <tr>
+          <td>{{ a.id }}</td>
+          <td>{{ a.name }}</td>
+          <td>{{ a.department.name if a.department else '全协会' }}</td>
+          <td>{{ a.event_date }}</td>
+          <td>
+            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin_activities.applications', act_id=a.id) }}">报名情况</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

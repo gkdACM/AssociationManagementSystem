@@ -7,6 +7,9 @@ from association.app.views.member_competitions import bp as member_competitions_
 from association.app.views.leader_projects import bp as leader_projects_bp
 from association.app.views.member_projects import bp as member_projects_bp
 from association.app.views.admin_projects import bp as admin_projects_bp
+from association.app.views.admin_activities import bp as admin_activities_bp
+from association.app.views.leader_activities import bp as leader_activities_bp
+from association.app.views.member_activities import bp as member_activities_bp
 from association.app.views.dev import bp as dev_bp
 from association.app.views.home import bp as home_bp
 from association.app.views.auth import bp as auth_bp
@@ -50,6 +53,9 @@ def create_app():
     app.register_blueprint(leader_projects_bp)
     app.register_blueprint(member_projects_bp)
     app.register_blueprint(admin_projects_bp)
+    app.register_blueprint(admin_activities_bp)
+    app.register_blueprint(leader_activities_bp)
+    app.register_blueprint(member_activities_bp)
     app.register_blueprint(points_bp)
     app.register_blueprint(dev_bp)
     app.register_blueprint(setup_bp)

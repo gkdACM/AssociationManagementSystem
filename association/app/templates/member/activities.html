@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="m-0 page-title">活动</h2>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr><th>名称</th><th>部门</th><th>日期</th><th>报名</th></tr>
+      </thead>
+      <tbody>
+      {% for a in items %}
+        <tr>
+          <td>{{ a.name }}</td>
+          <td>{{ a.department.name if a.department else '全协会' }}</td>
+          <td>{{ a.event_date }}</td>
+          <td>
+            <form method="post" action="{{ url_for('member_activities.apply', act_id=a.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <button class="btn btn-sm btn-outline-primary" type="submit">报名</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

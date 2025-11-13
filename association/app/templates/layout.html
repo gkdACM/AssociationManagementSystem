@@ -20,6 +20,7 @@
           {% if current_user %}
             {% if current_user.role == 'president' %}
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_competitions.competitions') }}">竞赛管理</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_activities.activities') }}">活动管理</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_projects.projects') }}">项目总览</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_users.users') }}">会员管理</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_users.reviews') }}">审核</a></li>
@@ -30,10 +31,12 @@
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_users.users') }}">会员列表</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_users.reviews') }}">审核</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_competitions.competitions') }}">竞赛管理</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_activities.activities') }}">活动管理</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_projects.projects') }}">项目总览</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('home.leaders') }}">负责人</a></li>
             {% elif current_user.role == 'minister' %}
               <li class="nav-item"><a class="nav-link" href="{{ url_for('leader_competitions.competitions') }}">本部门竞赛</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('leader_activities.activities') }}">本部门活动</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('leader_projects.projects') }}">项目管理</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('leader_projects.acceptances') }}">项目验收</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_changes.leader_department_changes') }}">部门更换审批</a></li>
@@ -41,6 +44,8 @@
               <li class="nav-item"><a class="nav-link" href="{{ url_for('home.leaders') }}">负责人</a></li>
             {% else %}
               <li class="nav-item"><a class="nav-link" href="{{ url_for('member_competitions.competitions') }}">竞赛安排</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('member_activities.activities') }}">活动</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('member_activities.my_activities') }}">我的活动</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('member_competitions.my_competitions') }}">我的竞赛</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('member_projects.projects') }}">项目</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('member_projects.my_projects') }}">我的项目</a></li>

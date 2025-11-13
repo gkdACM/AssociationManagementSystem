@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="m-0 page-title">报名审核：{{ activity.name }}</h2>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr><th>学号</th><th>姓名</th><th>状态</th><th>操作</th></tr>
+      </thead>
+      <tbody>
+      {% for ap in apps %}
+        <tr>
+          <td>{{ ap.user.student_id if ap.user else '' }}</td>
+          <td>{{ ap.user.name if ap.user else '' }}</td>
+          <td>{{ ap.status }}</td>
+          <td class="text-nowrap">
+            <form method="post" action="{{ url_for('leader_activities.applications', act_id=activity.id) }}" class="d-inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <input type="hidden" name="app_id" value="{{ ap.id }}" />
+              <input type="hidden" name="action" value="approve" />
+              <button class="btn btn-sm btn-outline-success" type="submit">通过</button>
+            </form>
+            <form method="post" action="{{ url_for('leader_activities.applications', act_id=activity.id) }}" class="d-inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <input type="hidden" name="app_id" value="{{ ap.id }}" />
+              <input type="hidden" name="action" value="reject" />
+              <button class="btn btn-sm btn-outline-danger" type="submit">驳回</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

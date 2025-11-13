@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="m-0 page-title">本部门活动</h2>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr><th>ID</th><th>名称</th><th>日期</th><th>操作</th></tr>
+      </thead>
+      <tbody>
+      {% for a in items %}
+        <tr>
+          <td>{{ a.id }}</td>
+          <td>{{ a.name }}</td>
+          <td>{{ a.event_date }}</td>
+          <td>
+            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('leader_activities.applications', act_id=a.id) }}">报名审核</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
