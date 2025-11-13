@@ -72,7 +72,8 @@ def import_users():
                 if v is not None:
                     setattr(u, k, v)
         else:
-            u = User(student_id=sid, created_at=datetime.utcnow(), registration_status='approved', password_hash='x', **fields)
+            from association.app.views.auth import hash_password
+            u = User(student_id=sid, created_at=datetime.utcnow(), registration_status='approved', password_hash=hash_password('123456'), **fields)
             db.session.add(u)
     db.session.commit()
     return redirect(url_for('admin_users.users'))
