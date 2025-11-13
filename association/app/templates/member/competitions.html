@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+<h2 class="mb-3 page-title">竞赛安排</h2>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>名称</th><th>类别</th><th>等级</th><th>部门</th><th>日期</th></tr>
+    </thead>
+    <tbody>
+    {% for e in items %}
+      <tr>
+        <td>{{ e.name }}</td>
+        <td>{{ '内部赛' if e.category=='internal' else '外部赛' }}</td>
+        <td>{{ e.level }}</td>
+        <td>{{ e.department.name if e.department else '' }}</td>
+        <td>{{ e.event_date }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+ </div>
+ </div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="m-0 page-title">竞赛成绩：{{ comp.name }}</h2>
+  <div>
+    <a class="btn btn-outline-secondary" href="{{ url_for('admin_competitions.competitions') }}">返回</a>
+  </div>
+ </div>
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">新增/更新成绩</div>
+      <div class="card-body">
+        <form class="row g-3" method="post">
+          {{ form.hidden_tag() }}
+          <div class="col-md-6">
+            <label class="form-label">学号</label>
+            {{ form.student_id(class='form-control') }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">分数（可选）</label>
+            {{ form.score(class='form-control') }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">奖项（可选）</label>
+            {{ form.award(class='form-control') }}
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">备注</label>
+            {{ form.remark(class='form-control') }}
+          </div>
+          <div class="col-12">
+            <button class="btn btn-primary" type="submit">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% if import_form %}
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">导入 CSV</div>
+      <div class="card-body">
+        <form class="row g-3" method="post" enctype="multipart/form-data">
+          {{ import_form.hidden_tag() }}
+          <div class="col-md-12">
+            {{ import_form.file(class='form-control') }}
+          </div>
+          <div class="col-12 d-flex gap-2">
+            <button class="btn btn-secondary" type="submit">导入</button>
+            <a class="btn btn-outline-success" href="{{ url_for('admin_competitions.export_competition_results', comp_id=comp.id) }}">导出 CSV</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+ </div>
+<div class="table-responsive mt-4">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>学号</th><th>姓名</th><th>分数</th><th>奖项</th><th>备注</th></tr>
+    </thead>
+    <tbody>
+    {% for r in results %}
+      <tr>
+        <td>{{ r.user.student_id if r.user else '' }}</td>
+        <td>{{ r.user.name if r.user else '' }}</td>
+        <td>{{ r.score }}</td>
+        <td>{{ r.award }}</td>
+        <td>{{ r.remark }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+ </div>
+ </div>
+{% endblock %}

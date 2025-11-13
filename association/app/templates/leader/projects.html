@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="m-0 page-title">项目管理</h2>
+</div>
+<div class="card mb-4">
+  <div class="card-body">
+    <form class="row g-3" method="post">
+      {{ form.hidden_tag() }}
+      <div class="col-md-6">
+        <label class="form-label">项目名称</label>
+        {{ form.name(class='form-control') }}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">GitHub 链接（可选）</label>
+        {{ form.github_url(class='form-control') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">开始日期</label>
+        {{ form.start_date(class='form-control') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">结束日期</label>
+        {{ form.end_date(class='form-control') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">部门</label>
+        {{ form.department_id(class='form-select') }}
+      </div>
+      <div class="col-md-12">
+        <label class="form-label">项目描述</label>
+        {{ form.description(class='form-control') }}
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">创建项目</button>
+      </div>
+    </form>
+  </div>
+ </div>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>ID</th><th>名称</th><th>负责人</th><th>状态</th><th>GitHub</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+    {% for p in items %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.leader.name if p.leader else '' }}</td>
+        <td>{{ p.status }}</td>
+        <td>{% if p.github_url %}<a href="{{ p.github_url }}" target="_blank">链接</a>{% endif %}</td>
+        <td class="text-nowrap">
+          <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('leader_projects.edit_project', project_id=p.id) }}">编辑</a>
+          <a class="btn btn-sm btn-outline-primary" href="{{ url_for('leader_projects.participants', project_id=p.id) }}">参与者</a>
+          <form method="post" action="{{ url_for('leader_projects.mark_complete', project_id=p.id) }}" class="d-inline">
+            <button class="btn btn-sm btn-outline-success" type="submit">申请验收</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+ </div>
+ </div>
+{% endblock %}

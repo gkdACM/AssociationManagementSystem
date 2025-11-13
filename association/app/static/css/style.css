@@ -19,6 +19,7 @@ body::before{content:"";position:fixed;inset:-10% -10% -10% -10%;pointer-events:
 .table{border-radius:12px;overflow:hidden}
 .table thead th{background:#0f172a;color:#cbd5e1}
 .table tbody tr{transition:background .12s ease}
+.table tbody td,.table tbody th{color:#e5e7eb}
 .table tbody tr:hover{background:rgba(124,77,255,.08)}
 .badge{border-radius:999px;padding:.35rem .6rem}
 .badge.bg-success{background:linear-gradient(90deg,#16a34a,#22c55e)!important}
@@ -39,5 +40,18 @@ body::before{content:"";position:fixed;inset:-10% -10% -10% -10%;pointer-events:
 .trail{position:fixed;top:0;left:0;pointer-events:none;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,109,251,.95),rgba(0,229,255,.85) 60%,rgba(0,0,0,0) 72%);box-shadow:0 0 24px rgba(255,109,251,.65),0 0 40px rgba(0,229,255,.45);mix-blend-mode:lighten;will-change:transform;z-index:9998}
 .error-contrast{color:#f8fafc}
 .error-contrast h2,.error-contrast p,.error-contrast .text-muted{color:#f8fafc}
+/* admin competitions page overrides */
+.page-competitions .page-title{color:#f8fafc}
+.page-competitions .table{background:#ffffff}
+.page-competitions .table tbody td,.page-competitions .table tbody th{color:#111827}
+.page-competitions .table tbody tr{background:#ffffff}
+.page-competitions .table tbody tr:hover{background:#f1f5f9}
+/* generic page table high-contrast utility */
+.page-table-white .page-title{color:#f8fafc}
+.page-table-white .table{background:#ffffff}
+.page-table-white .table tbody td,.page-table-white .table tbody th{color:#111827}
+.page-table-white .table thead th{color:#0f172a}
+.page-table-white .table tbody tr{background:#ffffff}
+.page-table-white .table tbody tr:hover{background:#f1f5f9}
 .
 .

@@ -1,7 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
+<div class="page-table-white">
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h2 class="m-0">会员列表</h2>
+  <h2 class="m-0 page-title">会员列表</h2>
   <div class="d-flex gap-2">
     <a class="btn btn-outline-success" href="{{ url_for('admin_users.export_users') }}">导出 CSV</a>
     <form method="post" action="{{ url_for('admin_users.import_users') }}" enctype="multipart/form-data" class="d-inline">
@@ -58,7 +59,7 @@
 <div class="table-responsive">
   <table class="table table-striped align-middle">
     <thead>
-      <tr><th>学号</th><th>姓名</th><th>班级</th><th>性别</th><th>年级</th><th>部门</th><th>状态</th><th>启用</th><th>操作</th></tr>
+      <tr><th>学号</th><th>姓名</th><th>班级</th><th>性别</th><th>年级</th><th>部门</th><th>角色</th><th>状态</th><th>启用</th><th>操作</th></tr>
     </thead>
     <tbody>
     {% for u in items %}
@@ -69,6 +70,7 @@
         <td>{{ u.gender }}</td>
         <td>{{ u.grade }}</td>
         <td>{{ u.department.name if u.department else '' }}</td>
+        <td>{{ role_cn(u.role, u.department.name if u.department else None) }}</td>
         <td>{{ u.registration_status }}</td>
         <td>{% if u.is_active %}<span class="badge bg-success">启用</span>{% else %}<span class="badge bg-secondary">禁用</span>{% endif %}</td>
         <td>
@@ -80,5 +82,6 @@
     {% endfor %}
     </tbody>
   </table>
+ </div>
  </div>
 {% endblock %}

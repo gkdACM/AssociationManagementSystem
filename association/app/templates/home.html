@@ -9,8 +9,8 @@
     <div class="card h-100">
       <div class="card-body">
         <h5 class="card-title">管理端</h5>
-        <p class="card-text">考试创建、编辑、删除，成绩录入与导入导出。</p>
-        <a class="btn btn-primary" href="{{ url_for('admin_exams.exams') }}">进入考试管理</a>
+        <p class="card-text">竞赛创建、编辑、删除，成绩录入与导入导出。</p>
+        <a class="btn btn-primary" href="{{ url_for('admin_competitions.competitions') }}">进入竞赛管理</a>
       </div>
     </div>
   </div>
@@ -18,8 +18,12 @@
     <div class="card h-100">
       <div class="card-body">
         <h5 class="card-title">部长端</h5>
-        <p class="card-text">本部门考试与成绩维护。</p>
-        <a class="btn btn-primary" href="{{ url_for('leader_exams.exams') }}">进入本部门考试</a>
+        <p class="card-text">本部门竞赛与成绩维护；项目管理与验收。</p>
+        <div class="d-flex flex-wrap gap-2">
+          <a class="btn btn-primary" href="{{ url_for('leader_competitions.competitions') }}">本部门竞赛</a>
+          <a class="btn btn-outline-primary" href="{{ url_for('leader_projects.projects') }}">项目管理</a>
+          <a class="btn btn-outline-primary" href="{{ url_for('leader_projects.acceptances') }}">项目验收</a>
+        </div>
       </div>
     </div>
   </div>
@@ -27,9 +31,13 @@
     <div class="card h-100">
       <div class="card-body">
         <h5 class="card-title">成员端</h5>
-        <p class="card-text">查看考试安排与个人成绩。</p>
-        <a class="btn btn-outline-secondary me-2" href="{{ url_for('member_exams.exams') }}">考试安排</a>
-        <a class="btn btn-outline-secondary" href="{{ url_for('member_exams.my_results') }}">我的成绩</a>
+        <p class="card-text">查看竞赛安排与个人成绩；项目报名与我的项目。</p>
+        <div class="d-flex flex-wrap gap-2">
+          <a class="btn btn-outline-secondary" href="{{ url_for('member_competitions.competitions') }}">竞赛安排</a>
+          <a class="btn btn-outline-secondary" href="{{ url_for('member_competitions.my_competitions') }}">我的竞赛</a>
+          <a class="btn btn-outline-secondary" href="{{ url_for('member_projects.projects') }}">项目</a>
+          <a class="btn btn-outline-secondary" href="{{ url_for('member_projects.my_projects') }}">我的项目</a>
+        </div>
       </div>
     </div>
   </div>

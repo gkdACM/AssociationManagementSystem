@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="m-0 page-title">参与者：{{ proj.name }}</h2>
+  <div>
+    <a class="btn btn-outline-secondary" href="{{ url_for('leader_projects.projects') }}">返回</a>
+  </div>
+ </div>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>ID</th><th>成员</th><th>状态</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+    {% for p in parts %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.user.name if p.user else p.user_id }}</td>
+        <td>{{ p.status }}</td>
+        <td class="text-nowrap">
+          <form method="post" class="d-inline">
+            <input type="hidden" name="pid" value="{{ p.id }}" />
+            <input type="hidden" name="action" value="approve" />
+            <button class="btn btn-sm btn-outline-success" type="submit">通过</button>
+          </form>
+          <form method="post" class="d-inline">
+            <input type="hidden" name="pid" value="{{ p.id }}" />
+            <input type="hidden" name="action" value="reject" />
+            <button class="btn btn-sm btn-outline-danger" type="submit">驳回</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+ </div>
+ </div>
+{% endblock %}

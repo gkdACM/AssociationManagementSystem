@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-competitions">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="m-0 page-title">竞赛列表</h2>
+  </div>
+<div class="card mb-4">
+  <div class="card-body">
+    <form class="row g-3" method="post">
+      {{ form.hidden_tag() }}
+      <div class="col-md-4">
+        <label class="form-label">竞赛名称</label>
+        {{ form.name(class='form-control') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">日期</label>
+        {{ form.event_date(class='form-control') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">类别</label>
+        {{ form.category(class='form-select') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">竞赛等级</label>
+        {{ form.level(class='form-select') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">部门（内部赛可选）</label>
+        {{ form.department_id(class='form-select') }}
+      </div>
+      <div class="col-md-12">
+        <label class="form-label">描述</label>
+        {{ form.description(class='form-control') }}
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">新增竞赛</button>
+      </div>
+    </form>
+  </div>
+ </div>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>ID</th><th>名称</th><th>类别</th><th>等级</th><th>部门</th><th>日期</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+    {% for e in items %}
+      <tr>
+        <td>{{ e.id }}</td>
+        <td>{{ e.name }}</td>
+        <td>{{ '内部赛' if e.category=='internal' else '外部赛' }}</td>
+        <td>{{ e.level }}</td>
+        <td>{{ e.department.name if e.department else '' }}</td>
+        <td>{{ e.event_date }}</td>
+        <td class="text-nowrap">
+          <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin_competitions.edit_competition', comp_id=e.id) }}">编辑</a>
+          <form method="post" action="{{ url_for('admin_competitions.delete_competition', comp_id=e.id) }}" class="d-inline">
+            <button class="btn btn-sm btn-outline-danger" type="submit">删除</button>
+          </form>
+          <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin_competitions.competition_results', comp_id=e.id) }}">成绩</a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+  </div>
+ </div>
+{% endblock %}

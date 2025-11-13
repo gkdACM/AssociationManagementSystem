@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+<h2 class="mb-3 page-title">编辑项目</h2>
+<div class="card">
+  <div class="card-body">
+    <form class="row g-3" method="post">
+      {{ form.hidden_tag() }}
+      <div class="col-md-6">
+        <label class="form-label">项目名称</label>
+        {{ form.name(class='form-control') }}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">GitHub 链接（可选）</label>
+        {{ form.github_url(class='form-control') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">开始日期</label>
+        {{ form.start_date(class='form-control') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">结束日期</label>
+        {{ form.end_date(class='form-control') }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">部门</label>
+        {{ form.department_id(class='form-select') }}
+      </div>
+      <div class="col-md-12">
+        <label class="form-label">项目描述</label>
+        {{ form.description(class='form-control') }}
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">保存</button>
+      </div>
+    </form>
+  </div>
+ </div>
+ </div>
+{% endblock %}

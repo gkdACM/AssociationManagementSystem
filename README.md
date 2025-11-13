@@ -1,7 +1,9 @@
-# 大学计算机协会会员管理系统（Flask 单体）
+# 大学计算机协会会员管理系统
 
 ## 简介
-一个前后端不分离的 Flask 单体应用，用于管理协会会员、部门、考试与成绩、积分与等级、资料变更、入会/退会审核等。采用 JWT Cookie 鉴权、MySQL 数据库，服务端渲染（Jinja2）与现代化 UI 美化（Bootstrap + 自定义 CSS）。
+一个前后端不分离的 Flask 应用
+用于管理协会会员、部门、考试与成绩、积分与等级、资料变更、入会/退会审核等。
+采用 JWT Cookie 鉴权、MySQL 数据库，服务端渲染（Jinja2）与现代化 UI 美化（Bootstrap + 自定义 CSS）。
 
 ## 环境要求
 - Python ≥ 3.10
@@ -11,7 +13,7 @@
 ## 快速部署
 1. 克隆与进入目录
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/gkdACM/AssociationManagementSystem.git
    cd 会员管理系统
    ```
 2. 创建虚拟环境并安装依赖
@@ -105,4 +107,3 @@
 - 使用 WSGI 服务器（gunicorn / uWSGI）与反向代理（Nginx）
 - 配置环境变量与安全密钥；禁用调试模式
 - 数据库连接池参数按业务并发合理设置；监控连接与超时日志
-

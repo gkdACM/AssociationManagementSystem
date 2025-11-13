@@ -1,9 +1,12 @@
 from flask import Flask
 from association.config import Config
 from association.app.extensions import db, migrate, jwt
-from association.app.views.admin_exams import bp as admin_exams_bp
-from association.app.views.leader_exams import bp as leader_exams_bp
-from association.app.views.member_exams import bp as member_exams_bp
+from association.app.views.admin_competitions import bp as admin_competitions_bp
+from association.app.views.leader_competitions import bp as leader_competitions_bp
+from association.app.views.member_competitions import bp as member_competitions_bp
+from association.app.views.leader_projects import bp as leader_projects_bp
+from association.app.views.member_projects import bp as member_projects_bp
+from association.app.views.admin_projects import bp as admin_projects_bp
 from association.app.views.dev import bp as dev_bp
 from association.app.views.home import bp as home_bp
 from association.app.views.auth import bp as auth_bp
@@ -38,11 +41,14 @@ def create_app():
         return render_template('errors/401.html', reason='登录已失效'), 401
     app.register_blueprint(home_bp)
     app.register_blueprint(auth_bp)
-    app.register_blueprint(admin_exams_bp)
+    app.register_blueprint(admin_competitions_bp)
     app.register_blueprint(admin_users_bp)
     app.register_blueprint(admin_departments_bp)
-    app.register_blueprint(leader_exams_bp)
-    app.register_blueprint(member_exams_bp)
+    app.register_blueprint(leader_competitions_bp)
+    app.register_blueprint(member_competitions_bp)
+    app.register_blueprint(leader_projects_bp)
+    app.register_blueprint(member_projects_bp)
+    app.register_blueprint(admin_projects_bp)
     app.register_blueprint(points_bp)
     app.register_blueprint(dev_bp)
     app.register_blueprint(setup_bp)

@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+<h2 class="mb-3 page-title">我的竞赛成绩</h2>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>竞赛</th><th>分数</th><th>奖项</th><th>备注</th><th>时间</th></tr>
+    </thead>
+    <tbody>
+    {% for r in results %}
+      <tr>
+        <td>{{ r.competition.name if r.competition else r.competition_id }}</td>
+        <td>{{ r.score }}</td>
+        <td>{{ r.award }}</td>
+        <td>{{ r.remark }}</td>
+        <td>{{ r.created_at }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+ </div>
+ </div>
+{% endblock %}

@@ -41,7 +41,7 @@ def login_admin():
         return redirect(url_for('dev.seed'))
     token = create_access_token(identity=admin.id)
     from flask import make_response
-    resp = make_response(redirect(url_for('admin_exams.exams')))
+    resp = make_response(redirect(url_for('admin_competitions.competitions')))
     set_access_cookies(resp, token)
     session['uid'] = admin.id
     return resp

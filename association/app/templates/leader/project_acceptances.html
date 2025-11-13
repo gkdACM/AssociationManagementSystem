@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-table-white">
+<h2 class="mb-3 page-title">项目验收</h2>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr><th>ID</th><th>项目</th><th>负责人</th><th>状态</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+    {% for p in items %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.leader.name if p.leader else '' }}</td>
+        <td>{{ p.status }}</td>
+        <td class="text-nowrap">
+          <form method="post" action="{{ url_for('leader_projects.accept', project_id=p.id) }}" class="d-inline">
+            <button class="btn btn-sm btn-outline-success" type="submit">通过</button>
+          </form>
+          <form method="post" action="{{ url_for('leader_projects.reject', project_id=p.id) }}" class="d-inline">
+            <button class="btn btn-sm btn-outline-danger" type="submit">驳回</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+ </div>
+ </div>
+{% endblock %}
