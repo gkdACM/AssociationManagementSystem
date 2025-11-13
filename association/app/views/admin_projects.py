@@ -86,7 +86,9 @@ def audit_project(project_id):
                 for part in parts:
                     db.session.add(PointsLedger(user_id=part.user_id, source_type='manual', source_id=project_id, points=points, remark=f'项目[{proj.name}]通过奖励'))
         else:
-            proj.status = 'rejected'
+            # 不通过则退回进行中，允许继续修改
+            proj.status = 'active'
+            proj.end_date = None
         proj.updated_at = datetime.utcnow()
         db.session.commit()
     return redirect(url_for('admin_projects.projects'))
