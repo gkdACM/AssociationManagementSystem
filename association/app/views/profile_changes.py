@@ -234,7 +234,7 @@ def leader_approve(hist_id):
 @bp.route('/leader/profile-changes/<int:hist_id>/reject', methods=['POST'])
 @minister_department_required()
 def leader_reject(hist_id):
-    u = current_user()
+    u = get_current_user_optional()
     hist = db.session.get(UserProfileHistory, hist_id)
     if hist and hist.status == 'pending':
         target = db.session.get(User, hist.user_id)
