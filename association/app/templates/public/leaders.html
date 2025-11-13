@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header"><strong>协会负责人</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="p-3 border rounded">
+              <div class="mb-2">会长</div>
+              {% if president %}
+              <div><strong>{{ president.name }}</strong>（{{ president.student_id }}）</div>
+              <div class="text-muted">{{ president.email or '' }}</div>
+              {% else %}
+              <div class="text-muted">暂未设置</div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="p-3 border rounded">
+              <div class="mb-2">副会长</div>
+              {% if vps and vps|length > 0 %}
+                <ul class="m-0">
+                {% for u in vps %}
+                  <li><strong>{{ u.name }}</strong>（{{ u.student_id }}） <span class="text-muted">{{ u.email or '' }}</span></li>
+                {% endfor %}
+                </ul>
+              {% else %}
+              <div class="text-muted">暂未设置</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header"><strong>各部门部长</strong></div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr><th>部门</th><th>部长</th><th>联系方式</th></tr>
+            </thead>
+            <tbody>
+            {% for d in deps %}
+              <tr>
+                <td>{{ d.name }}</td>
+                {% set m = ministers.get(d.id) %}
+                {% if m %}
+                  <td>{{ m.name }}（{{ m.student_id }}）</td>
+                  <td>{{ m.email or '-' }}{% if m.phone %} / {{ m.phone }}{% endif %}</td>
+                {% else %}
+                  <td colspan="2" class="text-muted">暂未设置</td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

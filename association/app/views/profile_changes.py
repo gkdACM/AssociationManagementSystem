@@ -1,5 +1,6 @@
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, send_file
+import io, csv
 from flask_jwt_extended import jwt_required
 from association.app.extensions import db
 from association.app.models.user import User, Department
@@ -7,6 +8,9 @@ from association.app.models.audit import UserProfileHistory, LeaveApplication
 from association.app.forms.profile import ProfileChangeForm
 from association.app.forms.department_change import DepartmentChangeForm
 from association.app.utils.auth import get_current_user_optional, roles_required, minister_department_required
+from association.app.models.competition import CompetitionResult, Competition
+from association.app.models.project import ProjectParticipation, Project
+from association.app.views.auth import hash_password
 
 bp = Blueprint('profile_changes', __name__)
 
@@ -95,6 +99,53 @@ def me_leave():
         db.session.commit()
         return render_template('profile/me_leave.html', success='退会申请已提交，待审核')
     return render_template('profile/me_leave.html')
+
+@bp.route('/me/profile', methods=['GET'])
+@jwt_required()
+def me_profile():
+    u = get_current_user_optional()
+    comps = db.session.query(CompetitionResult).filter(CompetitionResult.user_id == u.id).order_by(CompetitionResult.created_at.desc()).all()
+    for r in comps:
+        r.competition = db.session.get(Competition, r.competition_id)
+    parts = db.session.query(ProjectParticipation).filter(ProjectParticipation.user_id == u.id).order_by(ProjectParticipation.applied_at.desc()).all()
+    for p in parts:
+        p.project = db.session.get(Project, p.project_id)
+    internal_awards = [r for r in comps if r.competition and r.competition.category == 'internal']
+    external_awards = [r for r in comps if r.competition and r.competition.category == 'external']
+    return render_template('profile/me_profile.html', user=u, internal_awards=internal_awards, external_awards=external_awards, parts=parts)
+
+@bp.route('/me/honors/export', methods=['GET'])
+@jwt_required()
+def me_honors_export():
+    u = get_current_user_optional()
+    results = db.session.query(CompetitionResult).filter(CompetitionResult.user_id == u.id).order_by(CompetitionResult.created_at.asc()).all()
+    output = io.StringIO()
+    w = csv.writer(output)
+    w.writerow(['类别','竞赛名称','等级','日期','部门','奖项','分数','备注'])
+    for r in results:
+        c = db.session.get(Competition, r.competition_id)
+        if not c:
+            continue
+        cat_cn = '内部赛' if c.category == 'internal' else '外部赛'
+        dep_name = c.department.name if c.department else ''
+        w.writerow([cat_cn, c.name, c.level, c.event_date, dep_name, r.award or '', r.score or '', r.remark or ''])
+    output.seek(0)
+    return send_file(io.BytesIO(output.getvalue().encode('utf-8')), mimetype='text/csv', as_attachment=True, download_name='my_honors.csv')
+
+@bp.route('/leader/reset-password', methods=['GET','POST'])
+@minister_department_required()
+def leader_reset_password():
+    u = get_current_user_optional()
+    if request.method == 'POST':
+        sid = (request.form.get('student_id') or '').strip()
+        target = User.query.filter_by(student_id=sid).first()
+        if target and target.department_id == u.department_id and target.role not in ('president','vice_president','minister'):
+            target.password_hash = hash_password('123456')
+            target.updated_at = datetime.utcnow()
+            db.session.commit()
+            return render_template('leader/reset_password.html', success='已重置为 123456，登录后需修改密码')
+        return render_template('leader/reset_password.html', error='学号不存在或不属于本部门，或不可重置')
+    return render_template('leader/reset_password.html')
 
 @bp.route('/admin/department-changes', methods=['GET'])
 @roles_required('president')

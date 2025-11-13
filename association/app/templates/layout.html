@@ -25,31 +25,41 @@
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_users.reviews') }}">审核</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_departments.departments') }}">部门管理</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('points.levels') }}">等级</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('home.leaders') }}">负责人</a></li>
             {% elif current_user.role == 'vice_president' %}
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_users.users') }}">会员列表</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_users.reviews') }}">审核</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_competitions.competitions') }}">竞赛管理</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_projects.projects') }}">项目总览</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('home.leaders') }}">负责人</a></li>
             {% elif current_user.role == 'minister' %}
               <li class="nav-item"><a class="nav-link" href="{{ url_for('leader_competitions.competitions') }}">本部门竞赛</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('leader_projects.projects') }}">项目管理</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('leader_projects.acceptances') }}">项目验收</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_changes.leader_department_changes') }}">部门更换审批</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_changes.leader_reset_password') }}">成员密码重置</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('home.leaders') }}">负责人</a></li>
             {% else %}
               <li class="nav-item"><a class="nav-link" href="{{ url_for('member_competitions.competitions') }}">竞赛安排</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('member_competitions.my_competitions') }}">我的竞赛</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('member_projects.projects') }}">项目</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('member_projects.my_projects') }}">我的项目</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_changes.me_profile') }}">个人信息</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_changes.me_change_department') }}">部门申请</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('profile_changes.me_leave') }}">退会申请</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('points.my_points') }}">我的积分</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('home.leaders') }}">负责人</a></li>
             {% endif %}
             {% else %}
               <li class="nav-item"><a class="nav-link" href="{{ url_for('member_competitions.competitions') }}">竞赛安排</a></li>
               <li class="nav-item"><a class="nav-link" href="{{ url_for('points.levels') }}">等级</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('home.leaders') }}">负责人</a></li>
           {% endif %}
         </ul>
         <ul class="navbar-nav">
           {% if current_user %}
           <li class="nav-item"><span class="navbar-text me-2"><i class="bi bi-person-circle me-1"></i>{{ current_user.name }}（{{ role_cn(current_user.role, current_user.department.name if current_user.department else None) }}）</span></li>
+          <li class="nav-item"><a class="btn btn-sm btn-outline-light me-2" href="{{ url_for('auth.change_password') }}">修改密码</a></li>
           <li class="nav-item">
             <form method="post" action="{{ url_for('auth.logout') }}">
               <button class="btn btn-sm btn-outline-light" type="submit">退出</button>

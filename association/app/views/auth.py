@@ -28,7 +28,10 @@ def login():
             return render_template('auth/login.html', form=form, error='账号未审核或已禁用')
         token = create_access_token(identity=user.id)
         from flask import make_response
-        resp = make_response(redirect(url_for('home.index')))
+        # 登录后如果为默认重置密码，强制跳转到修改密码页面
+        default_pw = check_password('123456', user.password_hash)
+        target = 'auth.change_password' if default_pw else 'home.index'
+        resp = make_response(redirect(url_for(target)))
         set_access_cookies(resp, token)
         session['uid'] = user.id
         return resp
@@ -82,3 +85,38 @@ def auth_debug():
         uid = None
     user = User.query.get(uid) if uid else None
     return render_template('auth/debug.html', user=user, uid=uid)
+
+@bp.route('/me/password', methods=['GET','POST'])
+def change_password():
+    uid = session.get('uid')
+    if not uid:
+        try:
+            verify_jwt_in_request(optional=True)
+            uid = get_jwt_identity()
+        except Exception:
+            uid = None
+    if not uid:
+        return redirect(url_for('auth.login'))
+    user = db.session.get(User, uid)
+    if request.method == 'POST':
+        current = (request.form.get('current_password') or '').strip()
+        newpw = (request.form.get('new_password') or '').strip()
+        confirm = (request.form.get('confirm_password') or '').strip()
+        if not current or not newpw or not confirm:
+            return render_template('auth/change_password.html', error='请填写所有字段')
+        if not check_password(current, user.password_hash):
+            return render_template('auth/change_password.html', error='当前密码不正确')
+        if len(newpw) < 6:
+            return render_template('auth/change_password.html', error='新密码长度至少为6位')
+        if newpw != confirm:
+            return render_template('auth/change_password.html', error='两次输入的新密码不一致')
+        user.password_hash = hash_password(newpw)
+        user.updated_at = datetime.utcnow()
+        db.session.commit()
+        from flask import make_response, flash
+        flash('密码已更新，请重新登录')
+        resp = make_response(redirect(url_for('auth.login')))
+        unset_jwt_cookies(resp)
+        session.clear()
+        return resp
+    return render_template('auth/change_password.html')

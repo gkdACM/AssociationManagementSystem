@@ -66,9 +66,12 @@
             <input type="text" name="student_id" placeholder="学号" class="form-control d-inline" style="width:200px" />
             <button class="btn btn-sm btn-outline-primary" type="submit">设为部长</button>
           </form>
+          <form method="post" action="{{ url_for('admin_departments.unset_minister', dep_id=d.id) }}" class="d-inline ms-2" onsubmit="return confirm('确认取消 {{ d.name }} 部门的部长？')">
+            <button class="btn btn-sm btn-outline-warning" type="submit">取消部长</button>
+          </form>
         </td>
         <td>
-          <form method="post" action="{{ url_for('admin_departments.delete_department', dep_id=d.id) }}" class="d-inline">
+          <form method="post" action="{{ url_for('admin_departments.delete_department', dep_id=d.id) }}" class="d-inline" onsubmit="return confirm('确认删除 {{ d.name }} 部门？该操作不可撤销。')">
             <button class="btn btn-sm btn-outline-danger" type="submit">删除</button>
           </form>
         </td>

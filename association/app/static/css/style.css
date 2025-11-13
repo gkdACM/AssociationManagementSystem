@@ -55,5 +55,6 @@ body::before{content:"";position:fixed;inset:-10% -10% -10% -10%;pointer-events:
 .page-table-white .table tbody tr:hover{background:#f1f5f9}
 /* departments page header high contrast */
 .page-departments .table thead th{color:#f8fafc}
+.page-users .table thead th{color:#f8fafc}
 .
 .

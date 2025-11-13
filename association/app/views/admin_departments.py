@@ -42,6 +42,13 @@ def set_minister(dep_id):
     u = User.query.filter_by(student_id=sid).first()
     if not u:
         return redirect(url_for('admin_departments.departments'))
+    if u.role in ('president','vice_president'):
+        return redirect(url_for('admin_departments.departments'))
+    existing = User.query.filter_by(department_id=dep_id, role='minister').all()
+    for ex in existing:
+        if ex.id != u.id:
+            ex.role = 'member'
+            ex.updated_at = datetime.utcnow()
     u.role = 'minister'
     u.department_id = dep_id
     u.updated_at = datetime.utcnow()
@@ -97,5 +104,18 @@ def transfer_president():
     else:
         current.role = 'member'
     current.updated_at = datetime.utcnow()
+    db.session.commit()
+    return redirect(url_for('admin_departments.departments'))
+
+@bp.route('/departments/<int:dep_id>/unset-minister', methods=['POST'])
+@roles_required('president')
+def unset_minister(dep_id):
+    d = db.session.get(Department, dep_id)
+    if not d:
+        return redirect(url_for('admin_departments.departments'))
+    ms = User.query.filter_by(department_id=dep_id, role='minister').all()
+    for m in ms:
+        m.role = 'member'
+        m.updated_at = datetime.utcnow()
     db.session.commit()
     return redirect(url_for('admin_departments.departments'))

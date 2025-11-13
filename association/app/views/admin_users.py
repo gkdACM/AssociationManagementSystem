@@ -3,13 +3,18 @@ import io, csv
 from flask import Blueprint, render_template, request, redirect, url_for, send_file
 from association.app.extensions import db
 from association.app.models.user import User, Department
-from association.app.models.audit import RegistrationAudit, LeaveApplication
+from association.app.models.audit import RegistrationAudit, LeaveApplication, UserProfileHistory
+from association.app.models.points import PointsLedger
+from association.app.models.project import ProjectParticipation
+from association.app.models.exam import ExamResult
+from association.app.models.competition import CompetitionResult
+from association.app.views.auth import hash_password
 from association.app.utils.auth import roles_required, get_current_user_optional
 
 bp = Blueprint('admin_users', __name__, url_prefix='/admin')
 
 @bp.route('/users', methods=['GET'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def users():
     dep = request.args.get('department_id', type=int)
     grade = request.args.get('grade')
@@ -24,7 +29,7 @@ def users():
     return render_template('admin/users.html', items=items, deps=deps, grades=grades)
 
 @bp.route('/users/<int:user_id>/disable', methods=['POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def disable_user(user_id):
     u = db.session.get(User, user_id)
     if u:
@@ -36,7 +41,7 @@ def disable_user(user_id):
     return redirect(url_for('admin_users.users'))
 
 @bp.route('/users/import', methods=['POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def import_users():
     f = request.files.get('file')
     if not f:
@@ -93,7 +98,7 @@ def export_users():
     return send_file(io.BytesIO(output.getvalue().encode('utf-8')), mimetype='text/csv', as_attachment=True, download_name='users.csv')
 
 @bp.route('/users/disable-by-grade', methods=['POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def disable_by_grade():
     grade = request.form.get('grade')
     if grade:
@@ -103,7 +108,7 @@ def disable_by_grade():
     return redirect(url_for('admin_users.users', grade=grade))
 
 @bp.route('/users/enable-by-grade', methods=['POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def enable_by_grade():
     grade = request.form.get('grade')
     if grade:
@@ -111,6 +116,55 @@ def enable_by_grade():
         db.session.query(User).filter(User.grade == grade).update({'is_active': True, 'updated_at': now})
         db.session.commit()
     return redirect(url_for('admin_users.users', grade=grade))
+
+@bp.route('/users/<int:user_id>/delete', methods=['POST'])
+@roles_required('president', 'vice_president')
+def delete_user(user_id):
+    u = db.session.get(User, user_id)
+    if not u:
+        return redirect(url_for('admin_users.users'))
+    if u.role in ('president','vice_president','minister'):
+        return redirect(url_for('admin_users.users'))
+    db.session.query(CompetitionResult).filter(CompetitionResult.user_id == user_id).delete(synchronize_session=False)
+    db.session.query(ExamResult).filter(ExamResult.user_id == user_id).delete(synchronize_session=False)
+    db.session.query(ProjectParticipation).filter(ProjectParticipation.user_id == user_id).delete(synchronize_session=False)
+    db.session.query(PointsLedger).filter(PointsLedger.user_id == user_id).delete(synchronize_session=False)
+    db.session.query(UserProfileHistory).filter(UserProfileHistory.user_id == user_id).delete(synchronize_session=False)
+    db.session.query(LeaveApplication).filter(LeaveApplication.user_id == user_id).delete(synchronize_session=False)
+    db.session.query(RegistrationAudit).filter(RegistrationAudit.user_id == user_id).delete(synchronize_session=False)
+    db.session.delete(u)
+    db.session.commit()
+    return redirect(url_for('admin_users.users'))
+
+@bp.route('/users/<int:user_id>/reset-password', methods=['POST'])
+@roles_required('president','vice_president','minister')
+def reset_password(user_id):
+    current = get_current_user_optional()
+    u = db.session.get(User, user_id)
+    if not u:
+        return redirect(url_for('admin_users.users'))
+    # 部长只能重置本部门成员密码
+    if current.role == 'minister':
+        if not u.department_id or u.department_id != current.department_id:
+            return redirect(url_for('admin_users.users'))
+        if u.role in ('president','vice_president','minister'):
+            return redirect(url_for('admin_users.users'))
+    u.password_hash = hash_password('123456')
+    u.updated_at = datetime.utcnow()
+    db.session.commit()
+    return redirect(url_for('admin_users.users'))
+
+@bp.route('/users/reset-all', methods=['POST'])
+@roles_required('president','vice_president')
+def reset_all_passwords():
+    now = datetime.utcnow()
+    default_hash = hash_password('123456')
+    users = User.query.all()
+    for u in users:
+        u.password_hash = default_hash
+        u.updated_at = now
+    db.session.commit()
+    return redirect(url_for('admin_users.users'))
 
 @bp.route('/users/set-vice', methods=['POST'])
 @roles_required('president')
@@ -146,7 +200,7 @@ def unset_vice():
 # 会长转让已迁移至部门管理页
 
 @bp.route('/reviews', methods=['GET'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def reviews():
     joins = User.query.filter_by(registration_status='pending').order_by(User.created_at.asc()).all()
     leaves = LeaveApplication.query.filter_by(status='pending').order_by(LeaveApplication.created_at.asc()).all()
@@ -155,7 +209,7 @@ def reviews():
     return render_template('admin/reviews.html', joins=joins, leaves=leaves)
 
 @bp.route('/reviews/registrations/<int:user_id>/approve', methods=['POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def approve_registration(user_id):
     u = db.session.get(User, user_id)
     if u and u.registration_status == 'pending':
@@ -166,7 +220,7 @@ def approve_registration(user_id):
     return redirect(url_for('admin_users.reviews'))
 
 @bp.route('/reviews/registrations/<int:user_id>/reject', methods=['POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def reject_registration(user_id):
     u = db.session.get(User, user_id)
     reason = request.form.get('reason')
@@ -179,7 +233,7 @@ def reject_registration(user_id):
     return redirect(url_for('admin_users.reviews'))
 
 @bp.route('/reviews/leaves/<int:leave_id>/approve', methods=['POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def approve_leave(leave_id):
     la = db.session.get(LeaveApplication, leave_id)
     if la and la.status == 'pending':
@@ -194,7 +248,7 @@ def approve_leave(leave_id):
     return redirect(url_for('admin_users.reviews'))
 
 @bp.route('/reviews/leaves/<int:leave_id>/reject', methods=['POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def reject_leave(leave_id):
     la = db.session.get(LeaveApplication, leave_id)
     if la and la.status == 'pending':
@@ -204,7 +258,7 @@ def reject_leave(leave_id):
     return redirect(url_for('admin_users.reviews'))
 
 @bp.route('/reviews/approve_all', methods=['POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def approve_all_reviews():
     now = datetime.utcnow()
     joins = User.query.filter_by(registration_status='pending').all()

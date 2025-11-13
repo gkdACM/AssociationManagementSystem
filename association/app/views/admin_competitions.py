@@ -11,7 +11,7 @@ from association.app.utils.auth import roles_required
 bp = Blueprint('admin_competitions', __name__, url_prefix='/admin')
 
 @bp.route('/competitions', methods=['GET', 'POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def competitions():
     form = CompetitionForm()
     form.department_id.choices = [(0, '不指定')] + [(d.id, d.name) for d in Department.query.order_by(Department.name).all()]
@@ -34,7 +34,7 @@ def competitions():
     return render_template('admin/competitions.html', form=form, items=items)
 
 @bp.route('/competitions/<int:comp_id>', methods=['GET', 'POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def edit_competition(comp_id):
     comp = db.session.get(Competition, comp_id)
     if not comp:
@@ -56,7 +56,7 @@ def edit_competition(comp_id):
     return render_template('admin/competition_form.html', form=form, comp=comp)
 
 @bp.route('/competitions/<int:comp_id>/delete', methods=['POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def delete_competition(comp_id):
     comp = db.session.get(Competition, comp_id)
     if comp:
@@ -66,7 +66,7 @@ def delete_competition(comp_id):
     return redirect(url_for('admin_competitions.competitions'))
 
 @bp.route('/competitions/<int:comp_id>/results', methods=['GET', 'POST'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def competition_results(comp_id):
     comp = db.session.get(Competition, comp_id)
     if not comp:
@@ -133,7 +133,7 @@ def competition_results(comp_id):
     return render_template('admin/competition_results.html', comp=comp, results=results, form=form, import_form=import_form)
 
 @bp.route('/competitions/<int:comp_id>/results/export', methods=['GET'])
-@roles_required('president')
+@roles_required('president', 'vice_president')
 def export_competition_results(comp_id):
     comp = db.session.get(Competition, comp_id)
     if not comp:
@@ -147,4 +147,3 @@ def export_competition_results(comp_id):
         writer.writerow([u.student_id if u else '', u.name if u else '', float(r.score) if r.score is not None else '', r.award or '', r.remark or ''])
     output.seek(0)
     return send_file(io.BytesIO(output.getvalue().encode('utf-8')), mimetype='text/csv', as_attachment=True, download_name=f'competition_{comp_id}_results.csv')
-

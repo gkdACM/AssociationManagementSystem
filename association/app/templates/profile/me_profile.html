@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header"><strong>个人信息</strong></div>
+      <div class="card-body">
+        <div class="mb-3">
+          <a class="btn btn-outline-success" href="{{ url_for('profile_changes.me_honors_export') }}">导出个人荣誉 CSV</a>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-3">姓名：{{ user.name }}</div>
+          <div class="col-md-3">学号：{{ user.student_id }}</div>
+          <div class="col-md-3">班级：{{ user.class_name }}</div>
+          <div class="col-md-3">年级：{{ user.grade }}</div>
+          <div class="col-md-3">性别：{{ user.gender }}</div>
+          <div class="col-md-3">部门：{{ user.department.name if user.department else '未分配' }}</div>
+          <div class="col-md-3">角色：{{ role_cn(user.role, user.department.name if user.department else None) }}</div>
+          <div class="col-md-3">状态：{% if user.is_active %}启用{% else %}禁用{% endif %}</div>
+          <div class="col-md-6">电话：{{ user.phone or '-' }}</div>
+          <div class="col-md-6">邮箱：{{ user.email or '-' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header"><strong>内部赛获奖/成绩</strong></div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr><th>竞赛名称</th><th>等级</th><th>日期</th><th>奖项</th><th>分数</th><th>备注</th></tr>
+            </thead>
+            <tbody>
+            {% for r in internal_awards %}
+              <tr>
+                <td>{{ r.competition.name }}</td>
+                <td>{{ r.competition.level }}</td>
+                <td>{{ r.competition.event_date }}</td>
+                <td>{{ r.award or '-' }}</td>
+                <td>{{ r.score or '-' }}</td>
+                <td>{{ r.remark or '-' }}</td>
+              </tr>
+            {% else %}
+              <tr><td colspan="6" class="text-muted">暂无数据</td></tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header"><strong>外部赛获奖/成绩</strong></div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr><th>竞赛名称</th><th>等级</th><th>日期</th><th>奖项</th><th>分数</th><th>备注</th></tr>
+            </thead>
+            <tbody>
+            {% for r in external_awards %}
+              <tr>
+                <td>{{ r.competition.name }}</td>
+                <td>{{ r.competition.level }}</td>
+                <td>{{ r.competition.event_date }}</td>
+                <td>{{ r.award or '-' }}</td>
+                <td>{{ r.score or '-' }}</td>
+                <td>{{ r.remark or '-' }}</td>
+              </tr>
+            {% else %}
+              <tr><td colspan="6" class="text-muted">暂无数据</td></tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header"><strong>我参与的项目</strong></div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr><th>项目名称</th><th>部门</th><th>状态</th><th>报名状态</th><th>负责人</th><th>GitHub</th><th>报名时间</th></tr>
+            </thead>
+            <tbody>
+            {% for p in parts %}
+              <tr>
+                <td>{{ p.project.name }}</td>
+                <td>{{ p.project.department.name if p.project.department else '-' }}</td>
+                <td>{{ p.project.status }}</td>
+                <td>{{ p.status }}</td>
+                <td>{{ p.project.leader.name if p.project.leader else '-' }}</td>
+                <td>{% if p.project.github_url %}<a href="{{ p.project.github_url }}" target="_blank">{{ p.project.github_url }}</a>{% else %}-{% endif %}</td>
+                <td>{{ p.applied_at }}</td>
+              </tr>
+            {% else %}
+              <tr><td colspan="7" class="text-muted">暂无数据</td></tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
