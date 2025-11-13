@@ -33,7 +33,7 @@ def users():
 def disable_user(user_id):
     u = db.session.get(User, user_id)
     if u:
-        if u.role in ('president', 'vice_president'):
+        if u.role in ('president', 'vice_president', 'minister'):
             return redirect(url_for('admin_users.users'))
         u.is_active = not u.is_active
         u.updated_at = datetime.utcnow()
