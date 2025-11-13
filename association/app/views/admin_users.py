@@ -159,10 +159,9 @@ def reset_password(user_id):
 @roles_required('president','vice_president')
 def reset_all_passwords():
     now = datetime.utcnow()
-    default_hash = hash_password('123456')
     users = User.query.all()
     for u in users:
-        u.password_hash = default_hash
+        u.password_hash = hash_password('123456')
         u.updated_at = now
     db.session.commit()
     return redirect(url_for('admin_users.users'))
