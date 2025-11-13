@@ -25,6 +25,10 @@
          {{ form.department_id(class='form-select') }}
        </div>
        <div class="col-md-4">
+         <label class="form-label">负责人学号</label>
+         {{ form.leader_student_id(class='form-control', placeholder='输入负责人学号') }}
+       </div>
+       <div class="col-md-4">
          <label class="form-label">GitHub</label>
          {{ form.github_url(class='form-control') }}
        </div>
@@ -50,7 +54,7 @@
 <div class="table-responsive">
   <table class="table table-striped align-middle">
     <thead>
-      <tr><th>ID</th><th>项目</th><th>负责人</th><th>部门</th><th>状态</th><th>起止</th><th>GitHub</th></tr>
+      <tr><th>ID</th><th>项目</th><th>负责人</th><th>部门</th><th>状态</th><th>起止</th><th>GitHub</th><th>操作</th></tr>
     </thead>
     <tbody>
     {% for p in items %}
@@ -62,6 +66,25 @@
         <td>{{ p.status }}</td>
         <td>{{ p.start_date }} — {{ p.end_date or '未设' }}</td>
         <td>{% if p.github_url %}<a href="{{ p.github_url }}" target="_blank">链接</a>{% endif %}</td>
+        <td class="text-nowrap">
+          {% if p.status == 'active' %}
+            <form method="post" action="{{ url_for('admin_projects.submit_project', project_id=p.id) }}" class="d-inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <button class="btn btn-sm btn-outline-primary" type="submit">提交验收</button>
+            </form>
+          {% elif p.status == 'pending_acceptance' %}
+            <form method="post" action="{{ url_for('admin_projects.audit_project', project_id=p.id) }}" class="d-inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <input type="hidden" name="action" value="approve" />
+              <button class="btn btn-sm btn-outline-success" type="submit">通过</button>
+            </form>
+            <form method="post" action="{{ url_for('admin_projects.audit_project', project_id=p.id) }}" class="d-inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <input type="hidden" name="action" value="reject" />
+              <button class="btn btn-sm btn-outline-danger" type="submit">不通过</button>
+            </form>
+          {% endif %}
+        </td>
       </tr>
     {% endfor %}
     </tbody>

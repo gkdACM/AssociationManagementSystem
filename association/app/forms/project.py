@@ -9,7 +9,7 @@ class ProjectForm(FlaskForm):
     github_url = URLField(validators=[Optional(), URL(require_tld=False)])
     start_date = DateField(validators=[Optional()])
     end_date = DateField(validators=[Optional()])
+    leader_student_id = StringField(validators=[DataRequired()])
 
 class ParticipationDecisionForm(FlaskForm):
     remark = StringField(validators=[Optional()])
-
