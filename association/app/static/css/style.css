@@ -60,6 +60,7 @@ body::before{content:"";position:fixed;inset:-10% -10% -10% -10%;pointer-events:
 /* departments page header high contrast */
 .page-departments .table thead th{color:#f8fafc}
 .page-users .table thead th{color:#f8fafc}
+.page-leaders .table thead th{color:#f8fafc}
 .home-hero{padding:2.5rem;border-radius:24px;background:linear-gradient(135deg,rgba(63,81,181,.22),rgba(124,77,255,.18));box-shadow:0 12px 36px rgba(63,81,181,.25)}
 .home-hero h2{font-size:2rem}
 .feature-card{border:1px solid #30364d;border-radius:16px;background:var(--glass);padding:1rem;transition:transform .2s ease,box-shadow .2s ease}
