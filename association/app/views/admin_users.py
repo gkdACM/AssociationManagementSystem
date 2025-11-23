@@ -8,7 +8,7 @@ from association.app.models.points import PointsLedger
 from association.app.models.project import Project, ProjectParticipation
 from association.app.models.exam import ExamResult
 from association.app.models.competition import CompetitionResult
-from association.app.models.activity import ActivityApplication
+from association.app.models.activity import ActivityApplication, Activity
 from association.app.views.auth import hash_password
 from association.app.utils.auth import roles_required, get_current_user_optional
 from sqlalchemy import inspect
@@ -133,6 +133,9 @@ def delete_user(user_id):
         return redirect(url_for('admin_users.users'))
     inspector = inspect(db.engine)
     tables = set(inspector.get_table_names())
+    if 'activity' in tables:
+        if db.session.query(Activity).filter(Activity.leader_user_id == user_id).count() > 0:
+            return redirect(url_for('admin_users.users'))
     db.session.query(CompetitionResult).filter(CompetitionResult.user_id == user_id).delete(synchronize_session=False)
     if 'exam_result' in tables:
         db.session.query(ExamResult).filter(ExamResult.user_id == user_id).delete(synchronize_session=False)
