@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 from association.app.extensions import db
@@ -50,12 +50,16 @@ def register():
     form = RegisterForm()
     form.department_id.choices = [(0, '不选择')] + [(d.id, d.name) for d in Department.query.order_by(Department.name).all()]
     
-    current_year = datetime.utcnow().year
+    current_year = datetime.now(timezone.utc).year
     form.grade.choices = [(f'{year}级', f'{year}级') for year in range(current_year, current_year - 6, -1)]
 
     if request.method == 'POST' and form.validate_on_submit():
         if User.query.filter_by(student_id=form.data['student_id']).first():
             return render_template('auth/register.html', form=form, error='该学号已存在')
+        if User.query.filter_by(phone=form.data['phone']).first():
+            return render_template('auth/register.html', form=form, error='该手机号已存在')
+        if User.query.filter_by(email=form.data['email']).first():
+            return render_template('auth/register.html', form=form, error='该邮箱已存在')
         dep_id = form.data['department_id'] or 0
         user = User(
             student_id=form.data['student_id'],
@@ -70,8 +74,8 @@ def register():
             registration_status='pending',
             department_id=None if dep_id == 0 else dep_id,
             is_active=True,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(timezone.utc),
+            updated_at=datetime.now(timezone.utc),
         )
         db.session.add(user)
         db.session.commit()
@@ -115,7 +119,7 @@ def change_password():
         if newpw != confirm:
             return render_template('auth/change_password.html', error='两次输入的新密码不一致')
         user.password_hash = hash_password(newpw)
-        user.updated_at = datetime.utcnow()
+        user.updated_at = datetime.now(timezone.utc)
         db.session.commit()
         from flask import make_response, flash
         flash('密码已更新，请重新登录')
