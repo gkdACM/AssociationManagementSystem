@@ -10,7 +10,12 @@ bp = Blueprint('setup', __name__)
 
 @bp.route('/setup', methods=['GET', 'POST'])
 def setup():
+    preset_password = os.getenv('SETUP_PASSWORD', 'ilovebing')
     if request.method == 'POST':
+        setup_password = request.form.get('setup_password')
+        if setup_password != preset_password:
+            return render_template('setup.html', database_url=Config.SQLALCHEMY_DATABASE_URI, error='设置密码不正确')
+
         host = request.form.get('host')
         port = request.form.get('port') or '3306'
         user = request.form.get('user')
@@ -38,7 +43,7 @@ def setup():
                 u.phone = admin_phone
                 u.email = admin_email
                 u.password_hash = pw_hash
-                u.role = 'system_admin'
+                u.role = 'president'
                 u.registration_status = 'approved'
                 u.is_active = True
                 u.updated_at = datetime.utcnow()
@@ -52,7 +57,7 @@ def setup():
                     phone=admin_phone,
                     email=admin_email,
                     password_hash=pw_hash,
-                    role='system_admin',
+                    role='president',
                     registration_status='approved',
                     is_active=True,
                     created_at=datetime.utcnow(),

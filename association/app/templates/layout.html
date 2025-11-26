@@ -91,19 +91,7 @@
     {% block content %}{% endblock %}
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-  ;(function(){
-    const links=[...document.querySelectorAll('a.nav-link')];
-    links.forEach(l=>{try{if(location.pathname===new URL(l.href).pathname){l.classList.add('active')}}catch(e){}})
-    let taps=0,timer=null,panel=null
-    function show(){
-      if(!panel){panel=document.createElement('div');panel.className='dev-panel';panel.innerHTML='<div class="d-flex justify-content-between align-items-center"><strong>开发者面板</strong><button class="btn btn-sm btn-outline-secondary">关闭</button></div><div class="mt-2"><a class="btn btn-sm btn-outline-dark me-2" href="/setup">配置中心</a><a class="btn btn-sm btn-outline-dark" href="/dev/seed">开发登录</a></div>';document.body.appendChild(panel);panel.querySelector('button').onclick=()=>panel.classList.remove('show')}
-      panel.classList.add('show')
-    }
-    const brand=document.querySelector('.navbar-brand');
-    if(brand){brand.addEventListener('click',()=>{if(window.innerWidth<768){taps++;clearTimeout(timer);timer=setTimeout(()=>{taps=0},800);if(taps>=5){taps=0;show()}}})}
-  })()
-  </script>
+
   <script>
   ;(function(){
     const fine=window.matchMedia('(pointer:fine)').matches
