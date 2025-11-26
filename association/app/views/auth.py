@@ -51,7 +51,7 @@ def register():
     form.department_id.choices = [(0, '不选择')] + [(d.id, d.name) for d in Department.query.order_by(Department.name).all()]
     
     current_year = datetime.utcnow().year
-    form.grade.choices = [(f'{year}级', f'{year}级') for year in range(current_year - 4, current_year + 1)]
+    form.grade.choices = [(f'{year}级', f'{year}级') for year in range(current_year, current_year - 6, -1)]
 
     if request.method == 'POST' and form.validate_on_submit():
         if User.query.filter_by(student_id=form.data['student_id']).first():
