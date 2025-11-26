@@ -33,7 +33,7 @@ def login():
         target = 'auth.change_password' if default_pw else 'home.index'
         resp = make_response(redirect(url_for(target)))
         set_access_cookies(resp, token)
-        session['uid'] = user.id
+
         return resp
     return render_template('auth/login.html', form=form)
 

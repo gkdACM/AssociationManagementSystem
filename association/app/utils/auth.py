@@ -11,21 +11,17 @@ def get_current_user_optional():
         uid = get_jwt_identity()
     except Exception:
         pass
-    if not uid:
-        uid = session.get('uid')
     return db.session.get(User, uid) if uid else None
 
 def roles_required(*roles):
     def wrapper(fn):
         @wraps(fn)
         def inner(*args, **kwargs):
-            uid = session.get('uid')
-            if not uid:
-                try:
-                    verify_jwt_in_request(optional=True)
-                    uid = get_jwt_identity()
-                except Exception:
-                    uid = None
+            try:
+                verify_jwt_in_request()
+                uid = get_jwt_identity()
+            except Exception:
+                uid = None
             if not uid:
                 abort(401)
             user = db.session.get(User, uid)
@@ -39,13 +35,11 @@ def minister_department_required():
     def wrapper(fn):
         @wraps(fn)
         def inner(*args, **kwargs):
-            uid = session.get('uid')
-            if not uid:
-                try:
-                    verify_jwt_in_request(optional=True)
-                    uid = get_jwt_identity()
-                except Exception:
-                    uid = None
+            try:
+                verify_jwt_in_request()
+                uid = get_jwt_identity()
+            except Exception:
+                uid = None
             if not uid:
                 abort(401)
             user = db.session.get(User, uid)
