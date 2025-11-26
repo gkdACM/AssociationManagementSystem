@@ -32,6 +32,10 @@
      ```bash
      mysql -uroot -p -e "CREATE DATABASE IF NOT EXISTS association DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
      ```
+   - **开发设置密码**：
+     - `/setup` 页面用于首次配置，受密码保护。
+     - 默认密码为 `ilovebing`。
+     - 如需修改，请在 `.env` 文件中添加 `SETUP_PASSWORD=your-new-password`。
 4. 数据库迁移与初始化
    ```bash
    FLASK_APP=association/wsgi.py .venv/bin/flask db upgrade
