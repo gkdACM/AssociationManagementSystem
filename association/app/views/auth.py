@@ -26,13 +26,14 @@ def login():
             return render_template('auth/login.html', form=form, error='账号或密码错误')
         if user.registration_status != 'approved' or not user.is_active:
             return render_template('auth/login.html', form=form, error='账号未审核或已禁用')
-        token = create_access_token(identity=user.id)
+        token = create_access_token(identity=str(user.id))
         from flask import make_response
         # 登录后如果为默认重置密码，强制跳转到修改密码页面
         default_pw = check_password('123456', user.password_hash)
         target = 'auth.change_password' if default_pw else 'home.index'
         resp = make_response(redirect(url_for(target)))
         set_access_cookies(resp, token)
+        session['uid'] = user.id
 
         return resp
     return render_template('auth/login.html', form=form)
