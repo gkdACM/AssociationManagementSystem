@@ -12,8 +12,8 @@ class RegisterForm(FlaskForm):
     student_id = StringField(validators=[DataRequired(), Length(max=32)])
     gender = SelectField(choices=[('男','男'),('女','女'),('其他','其他')], validators=[DataRequired()])
     grade = SelectField(validators=[DataRequired()])
-    phone = StringField(validators=[Optional(), Length(max=32)])
-    email = StringField(validators=[Optional(), Email(), Length(max=128)])
+    phone = StringField(validators=[DataRequired(), Length(max=32)], render_kw={"pattern": "^1\\d{10}$", "title": "请输入 11 位手机号"})
+    email = StringField(validators=[DataRequired(), Email(), Length(max=128)], render_kw={"type": "email"})
     department_id = SelectField(coerce=int, validators=[Optional()])
     password = PasswordField(validators=[DataRequired(), Length(min=6, max=64)])
 

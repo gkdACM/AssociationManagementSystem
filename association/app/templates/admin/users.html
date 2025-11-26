@@ -20,7 +20,7 @@
         <select class="form-select" name="department_id">
           <option value="">全部</option>
           {% for d in deps %}
-          <option value="{{ d.id }}" {% if request.args.get('department_id', type=int) == d.id %}selected{% endif %}>{{ d.name }}</option>
+          <option value="{{ d.id }}" {% if request.args.get('department_id')|int == d.id %}selected{% endif %}>{{ d.name }}</option>
           {% endfor %}
         </select>
       </div>
