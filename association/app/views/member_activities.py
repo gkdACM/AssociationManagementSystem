@@ -12,7 +12,7 @@ bp = Blueprint('member_activities', __name__)
 @jwt_required()
 def activities():
     u = get_current_user_optional()
-    items = Activity.query.filter((Activity.department_id == None) | (Activity.department_id == u.department_id)).order_by(Activity.event_date.asc()).all()
+    items = Activity.query.order_by(Activity.event_date.asc()).all()
     return render_template('member/activities.html', items=items)
 
 @bp.route('/activities/<int:act_id>/apply', methods=['POST'])
