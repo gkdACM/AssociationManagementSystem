@@ -159,6 +159,9 @@
   pip install gunicorn
   GUNICORN_CMD_ARGS="--bind 0.0.0.0:5050 --workers 3" .venv/bin/gunicorn association.wsgi:app
   ```
+  ```bash
+  FLASK_APP=association/wsgi.py FLASK_DEBUG=1 nohup .venv/bin/flask run --host 0.0.0.0 --port 5050 > flask.log 2>&1 &
+  ```
 - 可选：systemd 服务
   在 `/etc/systemd/system/assoc.service` 写入：
   ```ini
