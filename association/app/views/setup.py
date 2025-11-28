@@ -27,10 +27,10 @@ def setup():
         host = request.form.get('host')
         port = request.form.get('port') or '3306'
         user = request.form.get('user')
-        password = request.form.get('password')
+        db_password = request.form.get('db_password')
         dbname = request.form.get('dbname')
         if host and user and dbname:
-            url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}?charset=utf8mb4"
+            url = f"mysql+pymysql://{user}:{db_password}@{host}:{port}/{dbname}?charset=utf8mb4"
             with open('.env', 'a') as f:
                 f.write(f"\nDATABASE_URL={url}\n")
 
